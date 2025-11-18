@@ -1,416 +1,375 @@
-<!DOCTYPE html><html lang="vi"><head>
+<!DOCTYPE html><html lang="vi" class="scroll-smooth"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tổng Quan và Hướng Dẫn Sử Dụng Tính Năng Quản lý Khách hàng trên KiotViet</title>
+    <title>Quiz Game KiotViet Retail</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f9fafb; color: #111827; scroll-behavior: smooth; }
-        .toc-link.active { color: #2563eb; border-left-color: #2563eb; font-weight: 600; }
-        .main-nav-link.active, .sub-nav-link.active { background-color: #dbeafe; /* Tailwind blue-100 */ color: #1d4ed8; /* Tailwind blue-700 */ font-weight: 600; }
-        .main-nav-link.active i, .sub-nav-link.active i { color: #1d4ed8; /* Tailwind blue-700 */ }
-        #sidebar .submenu { transition: max-height 0.3s ease-in-out; max-height: 0; overflow: hidden; }
-        #sidebar .submenu.open { max-height: 1500px; }
-        .arrow-icon { transition: transform 0.3s ease-in-out; }
-        .arrow-icon.open { transform: rotate(90deg); }
-        /* Style for standard prose lists */
-        .prose ul, .prose ol { padding-left: 1.25rem; }
-        .prose ul > li, .prose ol > li { margin-top: 0.5rem; margin-bottom: 0.5rem; }
-    </style></head><body class="bg-gray-50">
-    <div id="app-wrapper">
-        <header class="bg-white sticky top-0 z-40 border-b border-gray-200">
-            <!-- HEADER CONTENT (STATIC) -->
-            <nav class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex items-center justify-between h-16">
-                    <div class="flex items-center">
-                        <button id="mobile-menu-button" class="lg:hidden mr-4 p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100">
-                            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
-                        </button>
-                        <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/"><img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" alt="KiotViet Logo" class="h-8"></a>
-                    </div>
-                    <div class="flex items-center flex-1 justify-end space-x-4">
-                           <div class="relative hidden sm:block w-full max-w-lg">
-                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                 <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                     <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
-                                 </svg>
-                             </div>
-                             <input class="block w-full bg-white border border-gray-300 rounded-full py-2 pl-10 pr-3 text-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500" placeholder="Chúng tôi có thể giúp bạn như thế nào?" type="search" name="q">
-                         </div>
-                           <a href="#" class="hidden sm:block text-sm font-medium text-blue-600 bg-white border border-gray-300 hover:bg-gray-50 px-4 py-2 rounded-full whitespace-nowrap">Đăng nhập</a>
-                           <a href="#" class="hidden sm:block text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-full whitespace-nowrap">Đăng ký</a>
-                    </div>
-                </div>
-            </nav>
-        </header>
-        <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="grid grid-cols-12 gap-8">
-                <aside id="sidebar" class="fixed top-0 left-0 h-full w-72 bg-white border-r border-gray-200 z-50 transform -translate-x-full transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 lg:block lg:col-span-3 lg:h-auto lg:w-auto lg:bg-transparent lg:border-none lg:z-auto">
-                    <!-- FULL, STATIC LEFT SIDEBAR. DYNAMIC HIGHLIGHTS WILL BE ADDED HERE. -->
-                    <div class="p-4 border-b border-gray-200 lg:hidden flex justify-between items-center">
-                        <h2 class="font-bold text-lg">Menu</h2>
-                        <button id="close-sidebar-button" class="p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100"><svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
-                    </div>
-                    <nav class="sticky top-24 space-y-1 p-4 lg:p-0 lg:pr-4 overflow-y-auto h-[calc(100vh-64px)] lg:h-auto">
-                        <!-- FULL SIDEBAR CONTENT IS STATIC AND PROVIDED HERE -->
-                        <!-- Làm quen KiotViet Retail -->
-                        <div>
-                            <button class="main-nav-toggle w-full flex items-center justify-between px-3 py-2 text-left">
-                                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Làm quen KiotViet Retail</h3>
-                                <svg class="arrow-icon h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-                            </button>
-                            <div class="submenu pl-3">
-                                <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/lam-quen/tong-quan" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-book-open w-5 text-center mr-3 text-gray-500"></i>Về 6 bước làm quen KiotViet Retail</a>
-                                <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/lam-quen/them-hang-hoa" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-plus-circle w-5 text-center mr-3 text-gray-500"></i>Bước 1: Thêm hàng hóa</a>
-                                <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/lam-quen/nhap-hang" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-dolly w-5 text-center mr-3 text-gray-500"></i>Bước 2: Nhập hàng</a>
-                                <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/lam-quen/ban-hang" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-cash-register w-5 text-center mr-3 text-gray-500"></i>Bước 3: Bán hàng</a>
-                                <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/lam-quen/tra-hang" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-undo w-5 text-center mr-3 text-gray-500"></i>Bước 4: Trả hàng</a>
-                                <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/lam-quen/cong-no" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-file-invoice-dollar w-5 text-center mr-3 text-gray-500"></i>Bước 5: Công nợ</a>
-                                <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/lam-quen/bao-cao" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-chart-pie w-5 text-center mr-3 text-gray-500"></i>Bước 6: Báo cáo</a>
-                            </div>
-                        </div>
-                        <!-- Tối ưu Vận hành -->
-                        <div>
-                            <button class="main-nav-toggle w-full flex items-center justify-between px-3 py-2 text-left mt-4">
-                                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Tối ưu Vận hành</h3>
-                                <svg class="arrow-icon h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-                            </button>
-                            <div class="submenu pl-3">
-                                <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/van-hanh/tong-quan" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-book-open w-5 text-center mr-3 text-gray-500"></i>Về các giải pháp tối ưu vận hành</a>
-                                <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/van-hanh/tim-san-pham" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-search w-5 text-center mr-3 text-gray-500"></i>Tìm sản phẩm</a>
-                                <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/van-hanh/ban-hang" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-cash-register w-5 text-center mr-3 text-gray-500"></i>Bán hàng</a>
-                                <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/van-hanh/tra-hang" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-undo w-5 text-center mr-3 text-gray-500"></i>Trả hàng</a>
-                                <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/van-hanh/dat-hang" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-cart-plus w-5 text-center mr-3 text-gray-500"></i>Đặt hàng</a>
-                                <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/van-hanh/thanh-toan" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-credit-card w-5 text-center mr-3 text-gray-500"></i>Thanh toán</a>
-                                <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/van-hanh/giao-van" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-truck w-5 text-center mr-3 text-gray-500"></i>Giao vận</a>
-                                <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/van-hanh/hoa-don-dien-tu" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-receipt w-5 text-center mr-3 text-gray-500"></i>Hóa đơn điện tử</a>
-                                <div>
-                                    <button class="main-nav-toggle w-full flex items-center justify-between text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md px-3 py-2 text-left group">
-                                        <span class="flex items-center"><i class="fa-solid fa-industry w-5 text-center mr-3 text-gray-500 group-hover:text-gray-700"></i>Chuyên ngành</span>
-                                        <svg class="arrow-icon h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-                                    </button>
-                                    <div class="submenu pl-6">
-                                        <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/van-hanh/chuyen-nganh/lo-hsd" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md">Các ngành quản lý Lô-HSD</a>
-                                        <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/van-hanh/chuyen-nganh/serial-imei" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md">Các ngành quản lý Serial-IMEI</a>
-                                        <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/van-hanh/chuyen-nganh/nha-thuoc" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md">Ngành Nhà thuốc</a>
-                                        <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/van-hanh/chuyen-nganh/vat-lieu-xay-dung" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md">Ngành Vật liệu xây dựng</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Tối ưu Quản lý -->
-                        <div>
-                            <button class="main-nav-toggle w-full flex items-center justify-between px-3 py-2 text-left mt-4">
-                                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Tối ưu Quản lý</h3>
-                                <svg class="arrow-icon h-4 w-4 text-gray-500 open" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-                            </button>
-                            <div class="submenu pl-3 open">
-                                <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/quan-ly/tong-quan" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-book-open w-5 text-center mr-3 text-gray-500"></i>Về các giải pháp tối ưu quản lý</a>
-                                <div>
-                                    <button class="main-nav-toggle w-full flex items-center justify-between text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md px-3 py-2 text-left group">
-                                        <span class="flex items-center"><i class="fa-solid fa-boxes-stacked w-5 text-center mr-3 text-gray-500 group-hover:text-gray-700"></i>Hàng hóa</span>
-                                        <svg class="arrow-icon h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-                                    </button>
-                                    <div class="submenu pl-6">
-                                        <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/quan-ly/hang-hoa/thuat-ngu" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md">Các thuật ngữ về hàng hóa</a>
-                                        <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/quan-ly/hang-hoa/hang-hoa-thuong" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md">Hàng hóa thường</a>
-                                        <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/quan-ly/hang-hoa/hang-dich-vu" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md">Hàng dịch vụ</a>
-                                        <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/quan-ly/hang-hoa/hang-combo" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md">Hàng combo - đóng gói</a>
-                                        <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/quan-ly/hang-hoa/hang-san-xuat" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md">Hàng sản xuất</a>
-                                        <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/quan-ly/hang-hoa/hang-lo-hsd" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md">Hàng Lô - HSD</a>
-                                        <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/quan-ly/hang-hoa/hang-serial-imei" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md">Hàng Serial - IMEI</a>
-                                        <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/quan-ly/hang-hoa/kiem-kho" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md">Kiểm kho</a>
-                                        <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/quan-ly/hang-hoa/xuat-huy" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md">Xuất hủy</a>
-                                        <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/quan-ly/hang-hoa/chuyen-hang" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md">Chuyển hàng</a>
-                                    </div>
-                                </div>
-                                <div>
-                                    <button class="main-nav-toggle w-full flex items-center justify-between text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md px-3 py-2 text-left group">
-                                        <span class="flex items-center"><i class="fa-solid fa-truck-loading w-5 text-center mr-3 text-gray-500 group-hover:text-gray-700"></i>Giao dịch với NCC</span>
-                                        <svg class="arrow-icon h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-                                    </button>
-                                    <div class="submenu pl-6">
-                                        <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/quan-ly/giao-dich-ncc/quan-ly-don-hang" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-clipboard-list w-5 text-center mr-3 text-gray-500"></i>Quản lý đơn hàng</a>
-                                        <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/quan-ly/giao-dich-ncc/nhap-hang" class="sub-nav-link group flex items-center px-3 py-2 text-sm font-medium rounded-md"><i class="fa-solid fa-dolly w-5 text-center mr-3"></i>Nhập hàng</a>
-                                        <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/quan-ly/giao-dich-ncc/dat-hang-nhap" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-file-invoice w-5 text-center mr-3 text-gray-500"></i>Đặt hàng nhập</a>
-                                        <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/quan-ly/giao-dich-ncc/tra-hang-nhap" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-arrow-left-long w-5 text-center mr-3 text-gray-500"></i>Trả hàng nhập</a>
-                                    </div>
-                                </div>
-                                <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/quan-ly/nha-cung-cap" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-user-tie w-5 text-center mr-3 text-gray-500"></i>Nhà cung cấp</a>
-                                <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/quan-ly/khach-hang" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md active"><i class="fa-solid fa-users w-5 text-center mr-3 text-gray-500"></i>Khách hàng</a>
-                                <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/quan-ly/nhan-vien" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-user-gear w-5 text-center mr-3 text-gray-500"></i>Nhân viên</a>
-                                <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/quan-ly/so-quy" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-book w-5 text-center mr-3 text-gray-500"></i>Sổ quỹ</a>
-                                <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/quan-ly/bao-cao" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-chart-pie w-5 text-center mr-3 text-gray-500"></i>Báo cáo</a>
-                                <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/quan-ly/thiet-lap" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-cog w-5 text-center mr-3 text-gray-500"></i>Thiết lập</a>
-                            </div>
-                        </div>
-                        <!-- Thúc đẩy Doanh thu -->
-                        <div>
-                            <button class="main-nav-toggle w-full flex items-center justify-between px-3 py-2 text-left mt-4">
-                                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Thúc đẩy Doanh thu</h3>
-                                <svg class="arrow-icon h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-                            </button>
-                            <div class="submenu pl-3">
-                                <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/doanh-thu/tong-quan" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-book-open w-5 text-center mr-3 text-gray-500"></i>Về các giải pháp thúc đẩy doanh thu</a>
-                                <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/doanh-thu/kiotviet-web" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-store-alt w-5 text-center mr-3 text-gray-500"></i>KiotViet Web</a>
-                                <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/doanh-thu/san-thuong-mai-dien-tu" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-shopping-basket w-5 text-center mr-3 text-gray-500"></i>Sàn TMĐT</a>
-                                <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/doanh-thu/mang-xa-hoi" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-share-alt w-5 text-center mr-3 text-gray-500"></i>Mạng xã hội</a>
-                                <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/doanh-thu/phan-tich" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-chart-line w-5 text-center mr-3 text-gray-500"></i>Phân tích</a>
-                                <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/doanh-thu/khuyen-mai" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-tags w-5 text-center mr-3 text-gray-500"></i>Khuyến mại</a>
-                                <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/doanh-thu/vouchers" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-ticket-alt w-5 text-center mr-3 text-gray-500"></i>Vouchers</a>
-                                <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/doanh-thu/coupons" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-star w-5 text-center mr-3 text-gray-500"></i>Coupons</a>
-                                <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/doanh-thu/tich-diem" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-gift w-5 text-center mr-3 text-gray-500"></i>Tích điểm</a>
-                                <a href="https://kiotvietlnd.github.io/hotro-kiotviet-retail/doanh-thu/zalo-zns" class="main-nav-link group flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><i class="fa-solid fa-comment-dots w-5 text-center mr-3 text-gray-500"></i>Zalo ZNS</a>
-                            </div>
-                        </div>
-                    </nav>
-                </aside>
-                <main class="col-span-12 lg:col-span-6 bg-white border border-gray-200 rounded-lg p-8">
-                    <!-- BREADCRUMBS (DYNAMIC) -->
-                    <div class="text-sm text-gray-500 mb-4">
-                        <a href="#" class="hover:underline">Tối ưu Quản lý</a> &gt; <span class="text-gray-700">Khách hàng</span>
-                    </div>
-                    <!-- TITLE (DYNAMIC) -->
-                    <h1 class="text-3xl font-extrabold tracking-tight text-gray-900">
-                        Tổng Quan và Hướng Dẫn Sử Dụng Tính Năng Quản lý Khách hàng trên KiotViet
-                    </h1>
-                    <!-- ARTICLE CONTENT (DYNAMIC) -->
-                    <article class="prose max-w-none mt-8 text-gray-700">
-                        <section id="gioi-thieu-chung" class="scroll-mt-24">
-                            <h3 class="text-xl font-bold text-gray-900 mt-10 mb-4">I. Giới thiệu chung</h3>
-                            <p>Tính năng Quản lý Khách hàng là một công cụ toàn diện được KiotViet phát triển nhằm giúp các nhà bán lẻ nắm bắt và chăm sóc tệp khách hàng của mình một cách khoa học và hiệu quả. Bằng cách tập trung hóa dữ liệu và cung cấp các công cụ phân tích chuyên sâu, KiotViet giúp cửa hàng xây dựng mối quan hệ bền vững với khách hàng, từ đó tối ưu hóa doanh thu và nâng cao lợi thế cạnh tranh.</p>
-                            <p class="mt-4"><strong>Mục đích và giá trị của tính năng:</strong></p>
-                            <p class="mt-4"><strong>Lợi ích chính:</strong></p>
-                            <div class="flex items-start mt-4">
-                                <span class="flex-shrink-0 w-6 text-center"><i class="fa-solid fa-check-circle text-blue-500 mt-1"></i></span>
-                                <p><strong>Quản lý tập trung:</strong> Tập trung hóa dữ liệu khách hàng (thông tin, lịch sử mua hàng, công nợ) trên một nền tảng, giúp tiết kiệm thời gian và giảm sai sót.</p>
-                            </div>
-                            <div class="flex items-start mt-4">
-                                <span class="flex-shrink-0 w-6 text-center"><i class="fa-solid fa-check-circle text-blue-500 mt-1"></i></span>
-                                <p><strong>Chăm sóc chuyên nghiệp:</strong> Phân loại khách hàng để xây dựng và gửi các chương trình khuyến mãi, chăm sóc cá nhân hóa hiệu quả.</p>
-                            </div>
-                            <div class="flex items-start mt-4">
-                                <span class="flex-shrink-0 w-6 text-center"><i class="fa-solid fa-check-circle text-blue-500 mt-1"></i></span>
-                                <p><strong>Tối ưu hóa kinh doanh:</strong> Phân tích hành vi và chân dung khách hàng để xác định nhóm giá trị cao, từ đó đưa ra chiến lược kinh doanh phù hợp.</p>
-                            </div>
-                            <div class="flex items-start mt-4">
-                                <span class="flex-shrink-0 w-6 text-center"><i class="fa-solid fa-check-circle text-blue-500 mt-1"></i></span>
-                                <p><strong>Kiểm soát công nợ:</strong> Theo dõi công nợ chính xác và thiết lập cảnh báo tự động để đảm bảo an toàn tài chính.</p>
-                            </div>
-                            <p class="mt-4"><strong>Đối tượng phù hợp:</strong></p>
-                            <div class="flex items-start mt-4">
-                                <span class="flex-shrink-0 w-6 text-center"><i class="fa-solid fa-check-circle text-blue-500 mt-1"></i></span>
-                                <p><strong>Chủ cửa hàng/Quản lý:</strong> Để có cái nhìn tổng quan về tệp khách hàng, đánh giá hiệu quả kinh doanh và đưa ra quyết định chiến lược.</p>
-                            </div>
-                            <div class="flex items-start mt-4">
-                                <span class="flex-shrink-0 w-6 text-center"><i class="fa-solid fa-check-circle text-blue-500 mt-1"></i></span>
-                                <p><strong>Nhân viên bán hàng/Thu ngân:</strong> Để truy xuất thông tin khách hàng nhanh chóng, hỗ trợ bán hàng và chăm sóc khách hàng tại điểm bán.</p>
-                            </div>
-                            <div class="flex items-start mt-4">
-                                <span class="flex-shrink-0 w-6 text-center"><i class="fa-solid fa-check-circle text-blue-500 mt-1"></i></span>
-                                <p><strong>Bộ phận Marketing/Chăm sóc khách hàng:</strong> Để xây dựng và triển khai các chiến dịch marketing, chương trình khách hàng thân thiết hiệu quả.</p>
-                            </div>
-                        </section>
-                        <section id="cac-thao-tac-pho-bien" class="scroll-mt-24">
-                            <h3 class="text-xl font-bold text-gray-900 mt-10 mb-4">II. Các thao tác phổ biến</h3>
-                            <p>Đây là những nghiệp vụ cơ bản và được sử dụng thường xuyên nhất trong quá trình quản lý khách hàng hàng ngày. Để minh họa, chúng ta sẽ theo dõi kịch bản của chị An, chủ cửa hàng thời trang "Chic & Style".</p>
-                            <div class="toc-item mt-6">
-                                <h4 id="them-moi-thong-tin-khach-hang" class="text-lg font-bold text-gray-800 mb-3 scroll-mt-24">1. Thêm mới thông tin khách hàng</h4>
-                                <p><strong>Tình huống:</strong> Một khách hàng lần đầu đến mua sắm tại cửa hàng Chic & Style. Chị An muốn lưu lại thông tin của vị khách này để tích điểm và chăm sóc sau này.</p>
-                                <p><strong>Giải pháp của KiotViet:</strong></p>
-                                <ul>
-                                    <li><strong>Thêm nhanh tại màn hình Bán hàng:</strong> Ngay khi tạo hóa đơn, chị An có thể nhấn vào biểu tượng dấu "+" bên cạnh ô tìm kiếm khách hàng. KiotViet sẽ hiển thị một biểu mẫu để chị nhập các thông tin cần thiết như Tên, Số điện thoại và lưu lại ngay lập tức.</li>
-                                    <li><strong>Thêm chi tiết tại màn hình Quản lý:</strong> Chị An có thể vào mục Khách hàng -> Khách hàng và chọn + Thêm mới. Tại đây, KiotViet cho phép nhập đầy đủ thông tin chi tiết hơn như địa chỉ, email, ngày sinh, giới tính và xếp khách vào nhóm có sẵn.</li>
-                                </ul>
-                            </div>
-                            <div class="toc-item mt-6">
-                                <h4 id="cap-nhat-thong-tin-khach-hang" class="text-lg font-bold text-gray-800 mb-3 scroll-mt-24">2. Cập nhật thông tin khách hàng</h4>
-                                <p><strong>Tình huống:</strong> Anh Minh, một khách hàng thân thiết của cửa hàng Chic & Style, vừa đổi số điện thoại mới. Chị An cần cập nhật lại thông tin này trên hệ thống để không làm gián đoạn liên lạc.</p>
-                                <p><strong>Giải pháp của KiotViet:</strong> Chị An truy cập vào mục Khách hàng -> Khách hàng, tìm kiếm "Anh Minh" trong danh sách. Sau đó, chị nhấp vào tên khách hàng và chọn nút Cập nhật. KiotViet sẽ cho phép chị chỉnh sửa lại số điện thoại và các thông tin khác, sau đó chỉ cần nhấn Lưu để hoàn tất.</p>
-                            </div>
-                            <div class="toc-item mt-6">
-                                <h4 id="quan-ly-nhom-khach-hang" class="text-lg font-bold text-gray-800 mb-3 scroll-mt-24">3. Quản lý nhóm khách hàng</h4>
-                                <p><strong>Tình huống:</strong> Để tri ân các khách hàng thường xuyên mua sắm, chị An muốn tạo một "Nhóm VIP" để áp dụng chính sách giảm giá 10% cho mọi hóa đơn.</p>
-                                <p><strong>Giải pháp của KiotViet:</strong> Trong mục Khách hàng -> Khách hàng, KiotViet cung cấp tính năng quản lý nhóm.</p>
-                                <ul>
-                                    <li><strong>Thêm nhóm:</strong> Chị An nhấp vào biểu tượng quản lý nhóm và chọn Thêm nhóm khách hàng. Chị đặt tên nhóm là "Nhóm VIP", thiết lập mức giảm giá là 10% và lưu lại.</li>
-                                    <li><strong>Thêm khách vào nhóm:</strong> Khi thêm mới hoặc cập nhật thông tin một khách hàng đủ điều kiện, chị An chỉ cần chọn "Nhóm VIP" trong trường thông tin "Nhóm khách hàng".</li>
-                                </ul>
-                            </div>
-                            <div class="toc-item mt-6">
-                                <h4 id="xem-va-dieu-chinh-diem-tich-luy" class="text-lg font-bold text-gray-800 mb-3 scroll-mt-24">4. Xem và điều chỉnh điểm tích lũy</h4>
-                                <p><strong>Tình huống:</strong> Một khách hàng thắc mắc về số điểm tích lũy của mình. Đồng thời, nhân dịp sinh nhật khách, chị An muốn cộng thêm 100 điểm vào tài khoản của khách hàng này như một món quà.</p>
-                                <p><strong>Giải pháp của KiotViet:</strong></p>
-                                <ul>
-                                    <li><strong>Xem điểm:</strong> Tại màn hình Bán hàng, khi chị An chọn tên khách hàng, KiotViet sẽ hiển thị ngay số điểm hiện có. Để xem chi tiết lịch sử, chị chỉ cần nhấp vào tên khách hàng.</li>
-                                    <li><strong>Điều chỉnh điểm:</strong> Chị An vào mục Khách hàng -> Khách hàng, tìm và chọn khách hàng cần điều chỉnh. Trong trang chi tiết, chị chọn tab Lịch sử tích điểm và nhấn nút Điều chỉnh. KiotViet sẽ cho phép chị cộng hoặc trừ điểm kèm theo ghi chú lý do. (Lưu ý: Nhân viên cần được cấp quyền để thực hiện thao tác này).</li>
-                                </ul>
-                            </div>
-                        </section>
-                        <section id="cac-tinh-nang-chuyen-sau" class="scroll-mt-24">
-                            <h3 class="text-xl font-bold text-gray-900 mt-10 mb-4">III. Các tính năng chuyên sâu</h3>
-                            <p>KiotViet cung cấp các công cụ nâng cao giúp việc quản lý khách hàng trở nên linh hoạt và sâu sắc hơn, phù hợp với các mô hình kinh doanh đặc thù.</p>
-                            <div class="toc-item mt-6">
-                                <h4 id="quan-ly-khach-hang-theo-chi-nhanh" class="text-lg font-bold text-gray-800 mb-3 scroll-mt-24">1. Quản lý khách hàng theo chi nhánh</h4>
-                                <p><strong>Tình huống:</strong> Cửa hàng Chic & Style của chị An có 2 chi nhánh ở hai quận khác nhau. Chị muốn mỗi chi nhánh chỉ quản lý và xem báo cáo công nợ của tệp khách hàng riêng tại khu vực đó để dễ dàng theo dõi và chăm sóc.</p>
-                                <p><strong>Giải pháp của KiotViet:</strong> Chị An có thể kích hoạt tính năng này trong Thiết lập -> Thiết lập cửa hàng -> Đối tác. Sau khi bật, KiotViet sẽ tự động phân bổ khách hàng về chi nhánh đã tạo ra họ. Từ đó, nhân viên tại mỗi chi nhánh sẽ chỉ tìm kiếm và giao dịch được với khách hàng thuộc chi nhánh mình, và các báo cáo cũng được phân tách một cách rõ ràng.</p>
-                            </div>
-                            <div class="toc-item mt-6">
-                                <h4 id="quan-ly-khach-hang-dong-thoi-la-nha-cung-cap" class="text-lg font-bold text-gray-800 mb-3 scroll-mt-24">2. Quản lý khách hàng đồng thời là nhà cung cấp</h4>
-                                <p><strong>Tình huống:</strong> Chị An có nhập hàng từ một xưởng may, và chủ xưởng may này cũng thường xuyên mua quần áo tại cửa hàng của chị. Chị muốn gộp các giao dịch mua và bán này lại để theo dõi công nợ tổng của đối tác một cách thuận tiện.</p>
-                                <p><strong>Giải pháp của KiotViet:</strong> Bằng cách bật tính năng "Quản lý khách hàng đồng thời là nhà cung cấp" trong phần Thiết lập, KiotViet sẽ tự động tổng hợp công nợ hai chiều. Khi chị An tạo hóa đơn bán hàng hay phiếu nhập hàng cho đối tác này, hệ thống sẽ luôn hiển thị một con số công nợ duy nhất, phản ánh đúng thực tế giao dịch giữa hai bên.</p>
-                            </div>
-                            <div class="toc-item mt-6">
-                                <h4 id="canh-bao-cong-no-khach-hang" class="text-lg font-bold text-gray-800 mb-3 scroll-mt-24">3. Cảnh báo công nợ khách hàng</h4>
-                                <p><strong>Tình huống:</strong> Chị An lo ngại việc một số khách hàng mua nợ quá nhiều hoặc quá hạn thanh toán sẽ ảnh hưởng đến dòng tiền. Chị muốn hệ thống có cảnh báo tự động khi phát sinh giao dịch nợ mới cho những khách hàng này.</p>
-                                <p><strong>Giải pháp của KiotViet:</strong> KiotViet cho phép thiết lập tính năng "Cảnh báo công nợ khách hàng". Sau khi bật, trên màn hình Bán hàng, nếu chị An chọn một khách hàng đang có nợ quá hạn hoặc vượt hạn mức cho phép, KiotViet sẽ hiển thị cảnh báo bằng cách bôi đỏ thông tin nợ, giúp nhân viên thu ngân chú ý và nhắc nhở khách hàng.</p>
-                            </div>
-                            <div class="toc-item mt-6">
-                                <h4 id="phan-tich-khach-hang-rfm" class="text-lg font-bold text-gray-800 mb-3 scroll-mt-24">4. Phân tích Khách hàng (RFM)</h4>
-                                <p><strong>Tình huống:</strong> Cuối năm, chị An muốn biết đâu là nhóm khách hàng "Trung thành", đâu là nhóm "Tiềm năng" và nhóm nào "Sắp rời bỏ" để xây dựng các chiến dịch marketing và tri ân phù hợp cho từng nhóm.</p>
-                                <p><strong>Giải pháp của KiotViet:</strong> Chị An truy cập mục Phân tích -> Khách hàng. Tại đây, KiotViet cung cấp các báo cáo và biểu đồ trực quan. Đặc biệt, mô hình phân loại RFM (Recency - Frequency - Monetary) sẽ tự động phân nhóm khách hàng dựa trên Lần mua gần nhất, Tần suất mua và Giá trị chi tiêu, giúp chị An có một cái nhìn sâu sắc và đưa ra các hành động chăm sóc chính xác.</p>
-                            </div>
-                            <div class="toc-item mt-6">
-                                <h4 id="quan-ly-khach-hang-theo-nguoi-phu-trach" class="text-lg font-bold text-gray-800 mb-3 scroll-mt-24">5. Quản lý khách hàng theo người phụ trách</h4>
-                                <p><strong>Tình huống:</strong> Chị An giao cho mỗi nhân viên kinh doanh phụ trách chăm sóc một tệp khách hàng riêng. Chị muốn giới hạn để nhân viên nào chỉ có thể xem và giao dịch với các khách hàng do mình phụ trách.</p>
-                                <p><strong>Giải pháp của KiotViet:</strong> Bằng cách bật tính năng "Quản lý khách hàng theo người phụ trách" trong phần Thiết lập, KiotViet sẽ cho phép chị An gán tên nhân viên phụ trách cho từng khách hàng. Khi nhân viên đó đăng nhập, hệ thống sẽ tự động giới hạn danh sách khách hàng họ có thể thấy và thao tác, giúp bảo mật thông tin và cá nhân hóa trách nhiệm chăm sóc.</p>
-                            </div>
-                        </section>
-                        <section id="thong-tin-lien-he-ho-tro" class="scroll-mt-24">
-                            <h3 class="text-xl font-bold text-gray-900 mt-10 mb-4">Thông tin liên hệ hỗ trợ</h3>
-                            <p>Trong quá trình sử dụng, nếu có bất kỳ thắc mắc nào, bạn vui lòng liên hệ đội ngũ hỗ trợ của KiotViet:</p>
-                            <ul>
-                                <li>Tổng đài tư vấn bán hàng: <strong>1800 6162</strong></li>
-                                <li>Tổng đài hỗ trợ phần mềm: <strong>1900 6522</strong></li>
-                                <li>Email: <strong>hotro@kiotviet.com</strong></li>
-                            </ul>
-                        </section>
-                    </article>
-                </main>
-                <aside class="hidden lg:block lg:col-span-3">
-                    <nav id="toc-nav" class="sticky top-24">
-                        <h3 class="font-semibold text-gray-900 mb-3">Trong bài viết này</h3>
-                        <!-- RIGHT SIDEBAR ToC (DYNAMIC) -->
-                        <div class="space-y-1">
-                            <div><a href="#gioi-thieu-chung" class="toc-link toc-parent-link block border-l-2 border-transparent pl-4 py-1 text-sm text-gray-600 hover:text-blue-600 hover:border-gray-300">I.&nbsp;Giới thiệu chung</a></div>
-                            <div>
-                                <a href="#cac-thao-tac-pho-bien" class="toc-link toc-parent-link block border-l-2 border-transparent pl-4 py-1 text-sm text-gray-600 hover:text-blue-600 hover:border-gray-300">II.&nbsp;Các thao tác phổ biến</a>
-                                <div class="toc-submenu pl-4 mt-2 space-y-1 border-l border-gray-200">
-                                    <a href="#them-moi-thong-tin-khach-hang" class="toc-link block pl-4 py-1 text-sm text-gray-600 hover:text-blue-600">1.&nbsp;Thêm mới thông tin khách hàng</a>
-                                    <a href="#cap-nhat-thong-tin-khach-hang" class="toc-link block pl-4 py-1 text-sm text-gray-600 hover:text-blue-600">2.&nbsp;Cập nhật thông tin khách hàng</a>
-                                    <a href="#quan-ly-nhom-khach-hang" class="toc-link block pl-4 py-1 text-sm text-gray-600 hover:text-blue-600">3.&nbsp;Quản lý nhóm khách hàng</a>
-                                    <a href="#xem-va-dieu-chinh-diem-tich-luy" class="toc-link block pl-4 py-1 text-sm text-gray-600 hover:text-blue-600">4.&nbsp;Xem và điều chỉnh điểm tích lũy</a>
-                                </div>
-                            </div>
-                            <div>
-                                <a href="#cac-tinh-nang-chuyen-sau" class="toc-link toc-parent-link block border-l-2 border-transparent pl-4 py-1 text-sm text-gray-600 hover:text-blue-600 hover:border-gray-300">III.&nbsp;Các tính năng chuyên sâu</a>
-                                <div class="toc-submenu pl-4 mt-2 space-y-1 border-l border-gray-200">
-                                    <a href="#quan-ly-khach-hang-theo-chi-nhanh" class="toc-link block pl-4 py-1 text-sm text-gray-600 hover:text-blue-600">1.&nbsp;Quản lý khách hàng theo chi nhánh</a>
-                                    <a href="#quan-ly-khach-hang-dong-thoi-la-nha-cung-cap" class="toc-link block pl-4 py-1 text-sm text-gray-600 hover:text-blue-600">2.&nbsp;Quản lý khách hàng đồng thời là nhà cung cấp</a>
-                                    <a href="#canh-bao-cong-no-khach-hang" class="toc-link block pl-4 py-1 text-sm text-gray-600 hover:text-blue-600">3.&nbsp;Cảnh báo công nợ khách hàng</a>
-                                    <a href="#phan-tich-khach-hang-rfm" class="toc-link block pl-4 py-1 text-sm text-gray-600 hover:text-blue-600">4.&nbsp;Phân tích Khách hàng (RFM)</a>
-                                    <a href="#quan-ly-khach-hang-theo-nguoi-phu-trach" class="toc-link block pl-4 py-1 text-sm text-gray-600 hover:text-blue-600">5.&nbsp;Quản lý khách hàng theo người phụ trách</a>
-                                </div>
-                            </div>
-                        </div>
-                    </nav>
-                </aside>
-            </div>
-        </div>
-        <footer class="bg-white border-t border-gray-200 mt-12">
-            <!-- FOOTER CONTENT (STATIC) -->
-            <div class="max-w-screen-2xl mx-auto py-6 px-4 sm:px-6 lg:px-8"><p class="text-center text-sm text-gray-500">&copy; 2025 KiotViet. All rights reserved.</p></div>
-        </footer>
-    </div>
-    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
-    <button id="scrollToTopBtn" class="hidden fixed bottom-5 right-5 z-50 p-3 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-opacity duration-300">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" /></svg>
-    </button>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; touch-action: manipulation; }
+        .soft-glow-background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; background: linear-gradient(to bottom right, #f8fafc, #e0f2fe); }
+        .kv-blue { color: #166def; } .bg-kv-blue { background-color: #166def; }
+        .main-card { background-color: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(203, 213, 225, 0.5); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+        .fade-in { animation: fadeIn 0.5s ease-in-out; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .mode-btn { transition: all 0.2s ease; } .mode-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); background-color: #f3f4f6; border-color: #166def;}
+        .mode-btn-selected { background-color: #e0f2fe !important; border-color: #166def !important; color: #0a58ca !important; }
+        .correct { background-color: #10B981 !important; color: white !important; border-color: #059669 !important; }
+        .incorrect { background-color: #EF4444 !important; color: white !important; border-color: #DC2626 !important; }
+        .btn { font-weight: bold; padding: 0.75rem 2rem; border-radius: 0.5rem; text-align: center; transition: all 0.2s; cursor: pointer; }
+        .btn-blue { background-color: #166def; color: white; } .btn-blue:hover { background-color: #0a58ca; }
+        .btn-green { background-color: #16a34a; color: white; } .btn-green:hover { background-color: #15803d; }
+        .btn-slate { background-color: #475569; color: white; } .btn-slate:hover { background-color: #334155; }
+    </style></head><body class="text-slate-700 antialiased flex items-center justify-center min-h-screen p-4">
+    <div class="soft-glow-background"></div>
+    
+    <main class="w-full max-w-2xl">
+        <div id="start-screen" class="main-card rounded-2xl p-6 sm:p-8 lg:p-10 fade-in"></div>
+        <div id="mode-screen" class="main-card rounded-2xl p-6 sm:p-8 lg:p-10 hidden fade-in"></div>
+        <div id="result-area" class="main-card rounded-2xl p-6 sm:p-8 lg:p-10 hidden text-center fade-in"></div>
+        <div id="review-screen" class="main-card rounded-2xl p-6 sm:p-8 lg:p-10 hidden fade-in w-full max-w-3xl"></div>
+    </main>
+
+    <div id="quiz-container" class="hidden fixed inset-0 z-40 flex flex-col md:flex-row bg-slate-50 fade-in"></div>
+    <div id="certificate-screen" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 fade-in"></div>
+    
     <script>
-        // SCRIPT CONTENT (STATIC)
-        document.addEventListener('DOMContentLoaded', () => {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebar-overlay');
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const closeSidebarButton = document.getElementById('close-sidebar-button');
-            const openSidebar = () => { sidebar.classList.remove('-translate-x-full'); overlay.classList.remove('hidden'); };
-            const closeSidebar = () => { sidebar.classList.add('-translate-x-full'); overlay.classList.add('hidden'); };
-            if (mobileMenuButton) mobileMenuButton.addEventListener('click', openSidebar);
-            if(closeSidebarButton) closeSidebarButton.addEventListener('click', closeSidebar);
-            if(overlay) overlay.addEventListener('click', closeSidebar);
-            document.querySelectorAll('#sidebar .main-nav-toggle').forEach(button => {
-                button.addEventListener('click', (e) => {
-                    const submenu = button.nextElementSibling;
-                    if (submenu && submenu.classList.contains('submenu')) {
-                        submenu.classList.toggle('open');
-                        const arrow = button.querySelector('.arrow-icon');
-                        if (arrow) { arrow.classList.toggle('open'); }
-                    }
-                });
+    const quizDataForClient = [{"id":"dao-tao-kiotviet-mobile-1","topic":"Đào tạo KiotViet Mobile","question":"Trên app KiotViet, khi thêm mới hàng hóa, tính năng nào giúp hệ thống tự động điền mã vạch nhanh chóng thay vì phải nhập tay?","answers":[{"id":"dao-tao-kiotviet-mobile-1-a","text":"Nhấn vào ô Mã hàng và nhập các con số từ bàn phím ảo.","feedback":"Đây là đáp án SAI. Đây là thao tác nhập thủ công, không tận dụng được tính năng tự động hóa của camera như đề bài yêu cầu."},{"id":"dao-tao-kiotviet-mobile-1-b","text":"Chạm vào biểu tượng Barcode (mã vạch) cạnh ô mã hàng để quét bằng camera.","feedback":"Đây là đáp án ĐÚNG. Biểu tượng Barcode kích hoạt camera để quét mã vạch thực tế, giúp hệ thống nhận diện và điền mã ngay lập tức."},{"id":"dao-tao-kiotviet-mobile-1-c","text":"Chụp ảnh sản phẩm và lưu vào mục hình ảnh đại diện.","feedback":"Đây là đáp án SAI. Việc chụp ảnh đại diện chỉ để hiển thị hình ảnh sản phẩm, không có tác dụng đọc mã vạch để điền dữ liệu."}]},{"id":"dao-tao-kiotviet-mobile-2","topic":"Đào tạo KiotViet Mobile","question":"Trên app KiotViet, để quản lý một sản phẩm có nhiều phiên bản khác nhau (như màu sắc xanh/đỏ, size S/M/L), bạn bắt buộc phải sử dụng tính năng nào?","answers":[{"id":"dao-tao-kiotviet-mobile-2-a","text":"Tính năng \"Thêm đơn vị tính\".","feedback":"Đây là đáp án SAI. \"Thêm đơn vị tính\" dùng để quy đổi đơn vị (ví dụ: cái -> hộp -> thùng), không dùng để phân loại màu sắc/kích cỡ."},{"id":"dao-tao-kiotviet-mobile-2-b","text":"Tính năng \"Thêm thuộc tính\".","feedback":"Đây là đáp án ĐÚNG. \"Thêm thuộc tính\" là chức năng chuyên dụng để tạo và quản lý các biến thể của cùng một sản phẩm gốc."},{"id":"dao-tao-kiotviet-mobile-2-c","text":"Tính năng \"Tạo hàng hóa mới\" cho từng phiên bản.","feedback":"Đây là đáp án SAI. Việc tạo nhiều mã hàng rời rạc là cách làm thủ công, gây khó khăn trong quản lý tồn kho tổng hợp và không đúng chuẩn phần mềm."}]},{"id":"dao-tao-kiotviet-mobile-3","topic":"Đào tạo KiotViet Mobile","question":"Trên app KiotViet, quy trình bán hàng được coi là hoàn tất (trừ kho và ghi nhận doanh thu) ngay sau khi người dùng thực hiện thao tác nào?","answers":[{"id":"dao-tao-kiotviet-mobile-3-a","text":"Nhấn nút \"Thanh toán\", kiểm tra thông tin và nhấn nút \"Hoàn thành\".","feedback":"Đây là đáp án ĐÚNG. Nút \"Hoàn thành\" là bước xác nhận cuối cùng để chốt giao dịch, hệ thống lúc này mới chính thức trừ tồn kho."},{"id":"dao-tao-kiotviet-mobile-3-b","text":"Chỉ cần chọn xong sản phẩm và nhấn nút \"Lưu tạm\".","feedback":"Đây là đáp án SAI. \"Lưu tạm\" chỉ giữ lại đơn hàng để xử lý sau, chưa trừ kho và chưa tính vào doanh thu thực tế."},{"id":"dao-tao-kiotviet-mobile-3-c","text":"Nhấn nút \"In hóa đơn\" ngay tại màn hình chọn sản phẩm.","feedback":"Đây là đáp án SAI. Người dùng không thể in hóa đơn khi chưa qua bước Thanh toán; hơn nữa hành động in không đồng nghĩa với việc chốt đơn trên hệ thống."}]},{"id":"dao-tao-kiotviet-mobile-4","topic":"Đào tạo KiotViet Mobile","question":"Trên app KiotViet, để thực hiện trả hàng đúng quy trình từ một giao dịch cũ, bạn cần thao tác vào đâu tại màn hình chi tiết hóa đơn?","answers":[{"id":"dao-tao-kiotviet-mobile-4-a","text":"Nhấn vào nút \"Xóa\" ở dưới cùng màn hình.","feedback":"Đây là đáp án SAI. Nút \"Xóa\" (nếu có và được phân quyền) sẽ hủy bỏ hoàn toàn hóa đơn, không phải là quy trình trả hàng (trả lại một phần hoặc toàn bộ) chuẩn."},{"id":"dao-tao-kiotviet-mobile-4-b","text":"Nhấn giữ vào tên khách hàng để hiện menu phụ.","feedback":"Đây là đáp án SAI. Thao tác nhấn giữ tên khách hàng thường để xem thông tin liên hệ, không liên quan đến nghiệp vụ trả hàng."},{"id":"dao-tao-kiotviet-mobile-4-c","text":"Chạm vào biểu tượng ba chấm ở góc màn hình và chọn \"Trả hàng\".","feedback":"Đây là đáp án ĐÚNG. Chức năng Trả hàng được thiết kế nằm trong menu mở rộng (biểu tượng ba chấm) của hóa đơn gốc."}]},{"id":"dao-tao-kiotviet-mobile-5","topic":"Đào tạo KiotViet Mobile","question":"Trên app KiotViet, đâu là thao tác chuẩn để ghi nhận khoản tiền đã trả cho Nhà cung cấp (thanh toán công nợ)?","answers":[{"id":"dao-tao-kiotviet-mobile-5-a","text":"Vào Sổ quỹ, chọn \"Lập phiếu chi\" và tự điền tên nhà cung cấp.","feedback":"Đây là đáp án SAI. Mặc dù về mặt dòng tiền là đúng, nhưng quy trình chuẩn trên App hướng dẫn người dùng đi từ đối tượng (Nhà cung cấp) để hệ thống tự link chứng từ chính xác nhất."},{"id":"dao-tao-kiotviet-mobile-5-b","text":"Vào chi tiết Nhà cung cấp, chọn tab \"Công nợ\" rồi nhấn \"Thanh toán\".","feedback":"Đây là đáp án ĐÚNG. Đây là quy trình được khuyến nghị để đảm bảo khoản chi được cấn trừ trực tiếp và chính xác vào công nợ của nhà cung cấp đó."},{"id":"dao-tao-kiotviet-mobile-5-c","text":"Vào màn hình Nhập hàng, tạo một phiếu nhập mới với giá trị âm.","feedback":"Đây là đáp án SAI. Phiếu nhập giá trị âm là thao tác sai lệch bản chất nghiệp vụ (trả hàng), không phải là thao tác thanh toán tiền nợ."}]},{"id":"thiet-lap-kv804-1","topic":"Thiết lập KV804","question":"Khi thay giấy cho máy in hóa đơn KV804, thao tác nào sau đây là bắt buộc để đảm bảo máy in ra nội dung (có mực)?","answers":[{"id":"thiet-lap-kv804-1-a","text":"Đặt cuộn giấy sao cho mặt giấy in hướng xuống dưới (úp xuống).","feedback":"Đây là đáp án SAI. Nếu đặt mặt giấy úp xuống, đầu in nhiệt sẽ tiếp xúc với mặt lưng của giấy (không có hóa chất cảm nhiệt), dẫn đến việc máy chạy nhưng giấy in ra trắng tinh."},{"id":"thiet-lap-kv804-1-b","text":"Đặt cuộn giấy sao cho mặt giấy in hướng lên trên (ngửa lên).","feedback":"Đây là đáp án ĐÚNG. Máy in nhiệt chỉ tác động nhiệt lên một mặt giấy; do đó mặt cảm nhiệt phải hướng lên trên để tiếp xúc trực tiếp với đầu in."},{"id":"thiet-lap-kv804-1-c","text":"Bóc bỏ lớp vỏ nhựa của trục cuốn giấy trước khi lắp.","feedback":"Đây là đáp án SAI. Trục cuốn giấy đi kèm thường là lõi nhựa cứng hoặc không cần trục (thả trực tiếp), việc bóc vỏ nhựa trục không phải là thao tác liên quan đến chiều giấy."}]},{"id":"thiet-lap-kv804-2","topic":"Thiết lập KV804","question":"Để khắc phục triệt để tình trạng hóa đơn in ra bị lệch lề hoặc thừa quá nhiều giấy trắng, bạn cần thiết lập gì trong cửa sổ xem trước (Preview)?","answers":[{"id":"thiet-lap-kv804-2-a","text":"Thiết lập Lề (Margins) là \"Mặc định\" (Default).","feedback":"Đây là đáp án SAI. Chế độ Mặc định của trình duyệt thường chừa lề khoảng 1-2cm mỗi bên, khiến nội dung hóa đơn khổ 80mm bị bóp nghẹt hoặc đẩy lệch sang trang sau."},{"id":"thiet-lap-kv804-2-b","text":"Thiết lập Khổ giấy (Paper size) sang A4.","feedback":"Đây là đáp án SAI. Máy in hóa đơn sử dụng khổ giấy K80 (80mm), nếu chọn khổ A4 bản in sẽ bị sai tỉ lệ hoàn toàn."},{"id":"thiet-lap-kv804-2-c","text":"Thiết lập Lề (Margins) là \"Không\" (None) và bỏ chọn \"Đầu trang và chân trang\".","feedback":"Đây là đáp án ĐÚNG. Việc bỏ lề (None) giúp nội dung in tràn sát mép giấy đúng chuẩn hóa đơn, và tắt Header/Footer giúp loại bỏ các dòng link web thừa ở đầu/cuối giấy."}]},{"id":"thiet-lap-kv804-3","topic":"Thiết lập KV804","question":"Dòng máy in KiotViet KV804 được trang bị các cổng kết nối nào để phục vụ linh hoạt cho cửa hàng?","answers":[{"id":"thiet-lap-kv804-3-a","text":"Chỉ có cổng USB duy nhất để kết nối máy tính.","feedback":"Đây là đáp án SAI. KV804 là dòng máy đa năng, không chỉ giới hạn ở cổng USB."},{"id":"thiet-lap-kv804-3-b","text":"Chỉ có cổng Bluetooth để kết nối điện thoại.","feedback":"Đây là đáp án SAI. KV804 phiên bản tiêu chuẩn sử dụng kết nối LAN (Wifi) cho thiết bị di động, không sử dụng sóng Bluetooth."},{"id":"thiet-lap-kv804-3-c","text":"Hỗ trợ cả 2 cổng: USB (cho máy tính, máy POS) và LAN (cho in mạng từ máy tính, máy POS, điện thoại).","feedback":"Đây là đáp án ĐÚNG. Thiết kế này cho phép máy vừa cắm trực tiếp vào máy thu ngân (ổn định cao), vừa chia sẻ được cho các thiết bị khác in qua mạng."}]},{"id":"thiet-lap-kv804-4","topic":"Thiết lập KV804","question":"Khi kết nối máy in KV804 với ngăn kéo đựng tiền qua cổng RJ11, ngăn kéo sẽ hoạt động theo cơ chế nào?","answers":[{"id":"thiet-lap-kv804-4-a","text":"Ngăn kéo tự động bật mở ngay khi lệnh in hóa đơn được thực hiện thành công.","feedback":"Đây là đáp án ĐÚNG. Máy in gửi tín hiệu xung điện qua cổng RJ11 kèm theo lệnh in, kích hoạt chốt khóa của ngăn kéo để bật ra ngay lập tức."},{"id":"thiet-lap-kv804-4-b","text":"Ngăn kéo chỉ mở khi người dùng nhấn nút bấm vật lý trên máy in.","feedback":"Đây là đáp án SAI. Máy in không có nút bấm vật lý riêng biệt chỉ để mở két; thao tác phải xuất phát từ lệnh phần mềm."},{"id":"thiet-lap-kv804-4-c","text":"Ngăn kéo sẽ tự động mở định kỳ 30 phút một lần để kiểm tra.","feedback":"Đây là đáp án SAI. Cơ chế này không tồn tại và gây mất an toàn nghiêm trọng cho tiền mặt."}]},{"id":"thiet-lap-kv804-5","topic":"Thiết lập KV804","question":"Điều kiện hạ tầng mạng bắt buộc để in hóa đơn từ App KiotViet trên điện thoại ra máy in KV804 là gì?","answers":[{"id":"thiet-lap-kv804-5-a","text":"Điện thoại phải bật Bluetooth và đứng cách máy in không quá 2 mét.","feedback":"Đây là đáp án SAI. Đây là điều kiện của máy in Bluetooth. KV804 in qua giao thức mạng TCP/IP nên không phụ thuộc vào khoảng cách 2m hay sóng Bluetooth."},{"id":"thiet-lap-kv804-5-b","text":"Máy in phải cắm dây mạng (LAN) và điện thoại phải bắt cùng mạng WiFi với máy in.","feedback":"Đây là đáp án ĐÚNG. Để App điện thoại \"nhìn thấy\" máy in, cả hai thiết bị phải cùng nằm trong một dải mạng nội bộ (Local Area Network)."},{"id":"thiet-lap-kv804-5-c","text":"Điện thoại phải sử dụng 4G để kết nối internet độc lập.","feedback":"Đây là đáp án SAI. Nếu dùng 4G, điện thoại sẽ nằm ở lớp mạng khác và không thể gửi lệnh in tới địa chỉ IP nội bộ của máy in."}]},{"id":"cai-dat-pos-d68-1","topic":"Cài đặt POS D68","question":"Để kết nối Internet cho máy POS D68, người dùng có thể sử dụng các phương thức nào sau đây?","answers":[{"id":"cai-dat-pos-d68-1-a","text":"Cắm dây mạng LAN vào cổng RJ45 hoặc kết nối Wifi qua bảng cài đặt nhanh.","feedback":"Đây là đáp án ĐÚNG. Máy POS D68 hỗ trợ linh hoạt cả hai chuẩn kết nối phổ biến là mạng dây (qua cổng RJ45 phía sau) và mạng không dây (Wifi)."},{"id":"cai-dat-pos-d68-1-b","text":"Chỉ có thể kết nối qua Wifi, thiết bị này không hỗ trợ mạng dây LAN.","feedback":"Đây là đáp án SAI. Máy POS D68 có tích hợp sẵn cổng mạng LAN (RJ45) ở mặt sau, không chỉ giới hạn ở Wifi."},{"id":"cai-dat-pos-d68-1-c","text":"Phải sử dụng USB 3G/4G cắm ngoài để kết nối mạng.","feedback":"Đây là đáp án SAI. Thiết bị hỗ trợ kết nối trực tiếp qua LAN hoặc Wifi, không yêu cầu thiết bị USB 3G/4G ngoại vi để vào mạng."}]},{"id":"cai-dat-pos-d68-2","topic":"Cài đặt POS D68","question":"Để thực hiện bán hàng trên máy POS D68, bạn cần tìm và cài đặt chính xác ứng dụng nào trên kho ứng dụng Play?","answers":[{"id":"cai-dat-pos-d68-2-a","text":"Ứng dụng \"KiotViet máy bán hàng\".","feedback":"Đây là đáp án ĐÚNG. Đây là ứng dụng chuyên biệt dành cho thu ngân để thực hiện các thao tác bán hàng, in hóa đơn trên thiết bị POS."},{"id":"cai-dat-pos-d68-2-b","text":"Ứng dụng \"KiotViet Quản lý\".","feedback":"Đây là đáp án SAI. Ứng dụng \"Quản lý\" dùng cho chủ cửa hàng để xem báo cáo và quản lý từ xa, không tối ưu cho thao tác bán hàng tại quầy POS."},{"id":"cai-dat-pos-d68-2-c","text":"Ứng dụng \"KiotViet POS Driver\".","feedback":"Đây là đáp án SAI. Không có ứng dụng tên là \"POS Driver\" trên kho ứng dụng. Việc cài đặt driver là không cần thiết với thiết bị này."}]},{"id":"cai-dat-pos-d68-3","topic":"Cài đặt POS D68","question":"Khi kết nối Máy quét mã vạch hoặc Màn hình hiển thị QR vào cổng USB của máy POS D68, bạn cần làm gì để thiết bị hoạt động?","answers":[{"id":"cai-dat-pos-d68-3-a","text":"Chỉ cần cắm vào cổng USB, hệ thống sẽ tự động nhận diện (Plug & Play) mà không cần cài đặt.","feedback":"Đây là đáp án ĐÚNG. Hệ thống Android trên POS D68 hỗ trợ cơ chế \"Cắm là chạy\" (Plug & Play) cho các thiết bị ngoại vi chuẩn USB này."},{"id":"cai-dat-pos-d68-3-b","text":"Phải tải Driver từ trang chủ KiotViet và cài đặt thủ công cho từng thiết bị.","feedback":"Đây là đáp án SAI. Việc cài đặt Driver thủ công là không cần thiết và gây phức tạp hóa quy trình, hệ thống đã tích hợp sẵn driver tương thích."},{"id":"cai-dat-pos-d68-3-c","text":"Phải khởi động lại máy POS, sau đó vào phần Cài đặt hệ thống để kích hoạt cổng USB.","feedback":"Đây là đáp án SAI. Các cổng USB hoạt động ngay lập tức khi cắm thiết bị vào mà không yêu cầu thao tác khởi động lại hay can thiệp hệ thống."}]},{"id":"cai-dat-pos-d68-4","topic":"Cài đặt POS D68","question":"Để màn hình phụ hiển thị giao diện tối ưu cho khách hàng (thông tin đơn hàng, mã QR thanh toán), bạn cần thực hiện thao tác nào trong phần Cài đặt?","answers":[{"id":"cai-dat-pos-d68-4-a","text":"Vào Cài đặt -> Hiển thị -> Bật tính năng \"Sử dụng màn hình phụ\".","feedback":"Đây là đáp án ĐÚNG. Trong ứng dụng KiotViet, tính năng này cần được BẬT (gạt sang xanh) để kích hoạt giao diện dành riêng cho khách hàng."},{"id":"cai-dat-pos-d68-4-b","text":"Vào Cài đặt -> Màn hình -> Chọn chế độ \"Mở rộng màn hình\" (Extended).","feedback":"Đây là đáp án SAI. Trên giao diện Android của máy POS không có tùy chọn \"Extended\" như trên Windows, việc này được xử lý trong cài đặt của ứng dụng KiotViet."},{"id":"cai-dat-pos-d68-4-c","text":"Nhấn nút cứng chuyển đổi màn hình ở cạnh bên của máy POS.","feedback":"Đây là đáp án SAI. Máy POS D68 không có nút cứng vật lý nào để chuyển đổi chế độ hiển thị màn hình."}]},{"id":"cai-dat-pos-d68-5","topic":"Cài đặt POS D68","question":"Nếu tính năng \"Sử dụng màn hình phụ\" trong cài đặt đang ở trạng thái TẮT, màn hình phụ sẽ hiển thị như thế nào?","answers":[{"id":"cai-dat-pos-d68-5-a","text":"Màn hình phụ sẽ phản chiếu (hiển thị y hệt) những gì đang diễn ra trên màn hình chính của thu ngân.","feedback":"Đây là đáp án ĐÚNG. Khi chưa bật chế độ tối ưu, màn hình phụ hoạt động ở chế độ mặc định là \"Mirroring\" (phản chiếu) màn hình chính."},{"id":"cai-dat-pos-d68-5-b","text":"Màn hình phụ sẽ tắt hoàn toàn (màn hình đen) để tiết kiệm điện năng.","feedback":"Đây là đáp án SAI. Màn hình phụ vẫn hoạt động và hiển thị hình ảnh (phản chiếu), không bị tắt đen."},{"id":"cai-dat-pos-d68-5-c","text":"Màn hình phụ chỉ hiển thị logo KiotViet cố định và không thay đổi theo thao tác bán hàng.","feedback":"Đây là đáp án SAI. Màn hình phụ sẽ phản chiếu thao tác của thu ngân chứ không chỉ hiện logo tĩnh."}]},{"id":"thiet-bi-ma-vach-1","topic":"Thiết bị Mã vạch","question":"Điểm khác biệt cơ bản nhất về khả năng đọc mã giữa máy quét đơn tia (XL-6500A) và máy quét đa tia (XL-2302) là gì?","answers":[{"id":"thiet-bi-ma-vach-1-a","text":"Máy quét đơn tia đọc được mã QR Code nhanh hơn máy đa tia.","feedback":"Đây là đáp án SAI. Máy đơn tia (Laser) về mặt công nghệ không thể đọc được mã trận 2D (QR Code)."},{"id":"thiet-bi-ma-vach-1-b","text":"Máy quét đơn tia chỉ đọc được mã vạch 1D (sọc ngang), còn máy đa tia đọc được cả mã 1D và mã QR Code (ma trận vuông).","feedback":"Đây là đáp án ĐÚNG. Công nghệ chụp ảnh của máy đa tia cho phép giải mã được các định dạng phức tạp như QR Code, trong khi máy Laser truyền thống chỉ quét được mã vạch tuyến tính."},{"id":"thiet-bi-ma-vach-1-c","text":"Cả hai loại máy đều chỉ đọc được mã vạch 1D, không đọc được mã QR Code.","feedback":"Đây là đáp án SAI. Máy đa tia XL-2302 được thiết kế chuyên dụng để đọc đa dạng các loại mã, bao gồm cả 2D."}]},{"id":"thiet-bi-ma-vach-2","topic":"Thiết bị Mã vạch","question":"Quy trình cài đặt máy quét mã vạch KiotViet trên máy tính hoặc máy POS tuân theo cơ chế nào?","answers":[{"id":"thiet-bi-ma-vach-2-a","text":"Phải tải và cài đặt Driver thủ công từ trang chủ nhà sản xuất trước khi cắm máy.","feedback":"Đây là đáp án SAI. Các dòng máy này sử dụng driver HID tiêu chuẩn có sẵn trong hệ điều hành, không cần cài đặt driver riêng."},{"id":"thiet-bi-ma-vach-2-b","text":"Cơ chế \"Cắm là chạy\" (Plug-and-Play): chỉ cần cắm dây USB vào cổng máy tính/POS là dùng được ngay.","feedback":"Đây là đáp án ĐÚNG. Thiết bị giao tiếp qua cổng USB dưới dạng bàn phím nhập liệu (HID), giúp hệ điều hành tự nhận diện ngay lập tức mà không cần cấu hình phức tạp."},{"id":"thiet-bi-ma-vach-2-c","text":"Phải gọi điện cho tổng đài KiotViet để xin mã kích hoạt thiết bị.","feedback":"Đây là đáp án SAI. Thiết bị phần cứng này không yêu cầu mã kích hoạt phần mềm để hoạt động."}]},{"id":"thiet-bi-ma-vach-3","topic":"Thiết bị Mã vạch","question":"Lợi ích vận hành vượt trội của máy quét đa tia (2D) so với máy quét đơn tia (1D) tại quầy thu ngân là gì?","answers":[{"id":"thiet-bi-ma-vach-3-a","text":"Khả năng quét đa hướng: chỉ cần lướt sản phẩm qua vùng quét mà không cần căn chỉnh tia sáng nằm ngang chính xác lên mã vạch.","feedback":"Đây là đáp án ĐÚNG. Công nghệ quét vùng (Area Imaging) cho phép bắt mã vạch ở bất kỳ góc độ nào, giúp tăng tốc độ thao tác đáng kể so với việc phải ngắm tia laser thẳng hàng."},{"id":"thiet-bi-ma-vach-3-b","text":"Máy sử dụng pin sạc nên không cần cắm dây điện lằng nhằng.","feedback":"Đây là đáp án SAI. Dòng XL-2302 là máy để bàn có dây (wired), lấy nguồn trực tiếp từ cổng USB."},{"id":"thiet-bi-ma-vach-3-c","text":"Máy có thể tự động in lại mã vạch mới nếu mã cũ bị mờ.","feedback":"Đây là đáp án SAI. Máy quét chỉ là thiết bị đầu vào (nhập liệu), không có chức năng in ấn (đầu ra)."}]},{"id":"thiet-bi-ma-vach-4","topic":"Thiết bị Mã vạch","question":"Đối với máy quét cầm tay XL-6500A, làm thế nào để kích hoạt chế độ \"quét tự động\" (rảnh tay) mà không cần bấm cò?","answers":[{"id":"thiet-bi-ma-vach-4-a","text":"Vào cài đặt Windows để chuyển đổi chế độ quét.","feedback":"Đây là đáp án SAI. Chế độ hoạt động được kiểm soát bởi phần cứng/firmware của máy, không phải cài đặt trong Windows."},{"id":"thiet-bi-ma-vach-4-b","text":"Dán băng dính để giữ chặt nút bấm (cò máy) liên tục.","feedback":"Đây là đáp án SAI. Đây là cách làm thủ công gây hại cho độ bền lò xo của nút bấm và không phải tính năng chuẩn."},{"id":"thiet-bi-ma-vach-4-c","text":"Lắp đặt máy lên chân đế đi kèm; cảm biến sẽ tự kích hoạt chế độ quét tự động.","feedback":"Đây là đáp án ĐÚNG. Chân đế đi kèm có tích hợp nam châm/cảm biến hoặc được thiết kế để máy chuyển sang chế độ \"Auto-sense\" khi được đặt cố định, giúp thu ngân rảnh tay thao tác hàng hóa."}]},{"id":"thiet-bi-ma-vach-5","topic":"Thiết bị Mã vạch","question":"Trên ứng dụng KiotViet Mobile, giải pháp nào giúp thay thế hoàn toàn máy quét vật lý để nhập hàng khi di chuyển trong kho?","answers":[{"id":"thiet-bi-ma-vach-5-a","text":"Sử dụng tính năng nhập liệu bằng giọng nói để đọc mã số.","feedback":"Đây là đáp án SAI. Hiện tại tính năng nhập mã hàng bằng giọng nói chưa phổ biến và độ chính xác không cao bằng quét hình ảnh."},{"id":"thiet-bi-ma-vach-5-b","text":"Kích hoạt Camera điện thoại thông qua biểu tượng mã vạch trên ứng dụng.","feedback":"Đây là đáp án ĐÚNG. Ứng dụng tận dụng camera độ phân giải cao của smartphone để quét và giải mã barcode, biến điện thoại thành máy quét di động tiện lợi."},{"id":"thiet-bi-ma-vach-5-c","text":"Kết nối chuột máy tính vào điện thoại để thao tác nhanh hơn.","feedback":"Đây là đáp án SAI. Chuột máy tính chỉ hỗ trợ điều hướng con trỏ, không có chức năng đọc/quét mã vạch quang học."}]}];
+    const answerKey = {"dao-tao-kiotviet-mobile-1":"dao-tao-kiotviet-mobile-1-b","dao-tao-kiotviet-mobile-2":"dao-tao-kiotviet-mobile-2-b","dao-tao-kiotviet-mobile-3":"dao-tao-kiotviet-mobile-3-a","dao-tao-kiotviet-mobile-4":"dao-tao-kiotviet-mobile-4-c","dao-tao-kiotviet-mobile-5":"dao-tao-kiotviet-mobile-5-b","thiet-lap-kv804-1":"thiet-lap-kv804-1-b","thiet-lap-kv804-2":"thiet-lap-kv804-2-c","thiet-lap-kv804-3":"thiet-lap-kv804-3-c","thiet-lap-kv804-4":"thiet-lap-kv804-4-a","thiet-lap-kv804-5":"thiet-lap-kv804-5-b","cai-dat-pos-d68-1":"cai-dat-pos-d68-1-a","cai-dat-pos-d68-2":"cai-dat-pos-d68-2-a","cai-dat-pos-d68-3":"cai-dat-pos-d68-3-a","cai-dat-pos-d68-4":"cai-dat-pos-d68-4-a","cai-dat-pos-d68-5":"cai-dat-pos-d68-5-a","thiet-bi-ma-vach-1":"thiet-bi-ma-vach-1-b","thiet-bi-ma-vach-2":"thiet-bi-ma-vach-2-b","thiet-bi-ma-vach-3":"thiet-bi-ma-vach-3-a","thiet-bi-ma-vach-4":"thiet-bi-ma-vach-4-c","thiet-bi-ma-vach-5":"thiet-bi-ma-vach-5-b"};
+    const feedbackMessages = { fail: `Cần cố gắng hơn!` };
+
+    let currentQuestionIndex, score, questionsForGame, gameResults, selectedMode, userInfo;
+    const elements = {};
+
+    function initializeGame() {
+        // Cache top-level containers first
+        ['start-screen', 'mode-screen', 'quiz-container', 'result-area', 'review-screen', 'certificate-screen'].forEach(id => elements[id] = document.getElementById(id));
+        elements.main = document.querySelector('main');
+
+        // Build and cache elements for each screen
+        buildStartScreen();
+        buildModeScreen();
+        buildQuizScreen();
+        // Placeholder for other screens that might need building
+        // buildResultScreen(); 
+        // buildReviewScreen();
+        // buildCertificateScreen();
+
+        addEventListeners();
+        resetGame();
+    }
+    
+    function buildStartScreen() {
+        elements['start-screen'].innerHTML = `
+             <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" alt="KiotViet Logo" class="h-10 mx-auto mb-6">
+             <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 text-center mb-2">${document.title}</h1>
+             <p class="text-slate-600 text-center mb-6">Vui lòng nhập thông tin để tiếp tục</p>
+             <div class="space-y-4 mb-6">
+                <div><label for="name-input" class="block text-sm font-medium text-slate-700 mb-1">Họ và tên</label><input type="text" id="name-input" class="w-full p-3 bg-white/80 border border-slate-300 rounded-lg focus:ring-2 focus:ring-kv-blue" placeholder="Nguyễn Văn A"></div>
+                <div><label for="department-input" class="block text-sm font-medium text-slate-700 mb-1">Phòng ban</label><input type="text" id="department-input" class="w-full p-3 bg-white/80 border border-slate-300 rounded-lg" placeholder="TSHNI99"></div>
+             </div>
+             <p id="info-error-message" class="text-red-500 text-center mt-4 h-5"></p>
+             <button id="continue-btn" class="w-full mt-4 btn btn-blue text-lg">Tiếp tục</button>`;
+        // Cache elements for this screen immediately after creation
+        elements.nameInput = document.getElementById('name-input');
+        elements.departmentInput = document.getElementById('department-input');
+        elements.infoErrorMessage = document.getElementById('info-error-message');
+        elements.continueBtn = document.getElementById('continue-btn');
+    }
+
+    function buildModeScreen() {
+        elements['mode-screen'].innerHTML = `
+            <h2 class="text-2xl font-bold text-slate-800 text-center mb-6">Chọn chế độ chơi</h2>
+            <div id="mode-selection-area" class="space-y-6"></div>
+            <p id="mode-error-message" class="text-red-500 text-center mt-4 h-5"></p>
+            <div class="flex flex-col sm:flex-row gap-4 mt-6">
+                 <button id="back-btn" class="w-full sm:w-auto btn btn-slate">Quay lại</button>
+                 <button id="start-btn" class="w-full sm:flex-1 btn btn-blue text-lg">Bắt đầu</button>
+            </div>`;
+        elements.modeSelectionArea = document.getElementById('mode-selection-area');
+        elements.modeErrorMessage = document.getElementById('mode-error-message');
+        elements.backBtn = document.getElementById('back-btn');
+        elements.startBtn = document.getElementById('start-btn');
+        setupModeSelection();
+    }
+
+    function buildQuizScreen() {
+         elements['quiz-container'].innerHTML = `
+            <div id="question-panel" class="w-full md:w-1/2 lg:w-3/5 bg-white p-6 sm:p-8 lg:p-12 flex flex-col h-screen overflow-y-auto">
+                <div class="flex-grow">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="text-sm font-semibold text-slate-600"><span id="question-count"></span></div>
+                        <div id="score-display" class="text-lg font-bold text-kv-blue">Điểm: 0</div>
+                    </div>
+                    <div class="w-full bg-slate-200 rounded-full h-2.5 mb-6">
+                        <div id="progress-bar" class="bg-kv-blue h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                    <p id="question-text" class="text-2xl font-semibold text-slate-800 mb-8"></p>
+                    <div id="answers-container" class="space-y-4"></div>
+                </div>
+                <div class="mt-8 flex justify-between items-center">
+                    <button id="exit-quiz-btn" class="text-slate-500 hover:text-red-600 font-semibold transition-colors"><i class="fas fa-times-circle mr-2"></i>Thoát</button>
+                    <button id="next-btn" class="hidden btn btn-green text-lg">Câu tiếp theo</button>
+                </div>
+            </div>
+            <div id="feedback-panel" class="w-full md:w-1/2 lg:w-2/5 bg-slate-100 p-8 flex flex-col justify-center items-center h-screen">
+                <div id="feedback-placeholder" class="text-center text-slate-500">
+                    <i class="far fa-lightbulb text-5xl mb-4"></i>
+                    <p class="text-lg font-semibold">Chọn một đáp án để xem phản hồi</p>
+                    <p>Phản hồi chi tiết sẽ xuất hiện ở đây.</p>
+                </div>
+                <div id="feedback-content" class="hidden w-full"></div>
+            </div>`;
+        elements.questionCount = document.getElementById('question-count');
+        elements.scoreDisplay = document.getElementById('score-display');
+        elements.progressBar = document.getElementById('progress-bar');
+        elements.questionText = document.getElementById('question-text');
+        elements.answersContainer = document.getElementById('answers-container');
+        elements.exitQuizBtn = document.getElementById('exit-quiz-btn');
+        elements.nextBtn = document.getElementById('next-btn');
+        elements.feedbackPlaceholder = document.getElementById('feedback-placeholder');
+        elements.feedbackContent = document.getElementById('feedback-content');
+    }
+    
+    document.addEventListener('DOMContentLoaded', initializeGame);
+    
+    function setupModeSelection() {
+        const topics = [...new Set(quizDataForClient.map(q => q.topic))].filter(Boolean);
+        let randomHtml = `
+            <div>
+                <p class="font-bold text-lg text-center mb-4 text-slate-800">Chơi ngẫu nhiên</p>
+                <div class="space-y-3">
+                    <button class="mode-btn w-full text-left flex justify-between items-center p-4 bg-white border border-slate-300 text-slate-700 font-semibold rounded-lg" data-mode="random" data-count="5">5 câu <i class="fas fa-chevron-right text-slate-400"></i></button>
+                    <button class="mode-btn w-full text-left flex justify-between items-center p-4 bg-white border border-slate-300 text-slate-700 font-semibold rounded-lg" data-mode="random" data-count="30">30 câu <i class="fas fa-chevron-right text-slate-400"></i></button>
+                    <button class="mode-btn w-full text-left flex justify-between items-center p-4 bg-white border border-slate-300 text-slate-700 font-semibold rounded-lg" data-mode="random" data-count="all">Toàn bộ (${quizDataForClient.length} câu) <i class="fas fa-chevron-right text-slate-400"></i></button>
+                </div>
+            </div>`;
+        
+        let topicHtml = '';
+        if (topics.length > 0) {
+            topicHtml = `
+                <div>
+                    <p class="font-bold text-lg text-center mb-4 text-slate-800">Chơi theo chủ đề</p>
+                    <div class="space-y-3">
+                        ${topics.map(topic => `<button class="mode-btn w-full text-left flex justify-between items-center p-4 bg-white border border-slate-300 text-slate-700 font-semibold rounded-lg" data-mode="topic" data-topic="${topic}">${topic} (5 câu) <i class="fas fa-chevron-right text-slate-400"></i></button>`).join('')}
+                    </div>
+                </div>`;
+        }
+        elements.modeSelectionArea.innerHTML = randomHtml + topicHtml;
+        
+        document.querySelectorAll('.mode-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('mode-btn-selected'));
+                e.currentTarget.classList.add('mode-btn-selected');
+                selectedMode = e.currentTarget.dataset;
+                elements.modeErrorMessage.innerText = '';
             });
-            const activeLink = document.querySelector('#sidebar .active');
-            if (activeLink) {
-                let parent = activeLink.closest('.submenu');
-                while(parent) {
-                    parent.classList.add('open');
-                    const prevButton = parent.previousElementSibling;
-                    if (prevButton && prevButton.classList.contains('main-nav-toggle')) {
-                        const arrow = prevButton.querySelector('.arrow-icon');
-                        if (arrow) { arrow.classList.add('open'); }
-                    }
-                    parent = parent.parentElement.closest('.submenu');
-                }
-            }
-            const sections = document.querySelectorAll('main section, main .toc-item');
-            const navLinks = document.querySelectorAll('#toc-nav a.toc-link');
-            const headerOffset = 120;
-            const activateLink = (id) => {
-                let activeParent = null;
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href') === `#${id}`) {
-                        link.classList.add('active');
-                        const parentTocItem = link.closest('.toc-submenu');
-                        if(parentTocItem){ activeParent = parentTocItem.previousElementSibling; }
-                    }
-                });
-                if (activeParent && activeParent.classList.contains('toc-parent-link')) { activeParent.classList.add('active'); }
-            };
-            const onScroll = () => {
-                if (window.innerWidth < 1024) return;
-                let currentSectionId = '';
-                sections.forEach(section => {
-                    const sectionTop = section.offsetTop - headerOffset;
-                    if (window.pageYOffset >= sectionTop) { currentSectionId = section.id || section.querySelector('h4')?.id; }
-                });
-                if (currentSectionId) { activateLink(currentSectionId); } 
-                else if (window.scrollY === 0 && navLinks.length > 0) {
-                    navLinks.forEach(link => link.classList.remove('active'));
-                    const firstLink = document.querySelector('#toc-nav a.toc-parent-link');
-                    if (firstLink) firstLink.classList.add('active');
-                }
-            };
-            window.addEventListener('scroll', onScroll, { passive: true });
-            navLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const targetId = this.getAttribute('href');
-                    const targetElement = document.querySelector(targetId);
-                    if (targetElement) {
-                        const elementPosition = targetElement.getBoundingClientRect().top;
-                        const offsetPosition = elementPosition + window.pageYOffset - (headerOffset - 20);
-                        window.scrollTo({ top: offsetPosition, behavior: "smooth" });
-                    }
-                });
-            });
-            onScroll();
-            const scrollToTopBtn = document.getElementById('scrollToTopBtn');
-            if (scrollToTopBtn) {
-                window.addEventListener('scroll', () => { if (window.scrollY > 300) { scrollToTopBtn.classList.remove('hidden'); } else { scrollToTopBtn.classList.add('hidden'); } });
-                scrollToTopBtn.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
-            }
         });
+    }
+
+    function addEventListeners() {
+        elements.continueBtn.addEventListener('click', proceedToModeSelection);
+        elements.backBtn.addEventListener('click', () => showScreen('start-screen'));
+        elements.startBtn.addEventListener('click', startGame);
+        elements.exitQuizBtn.addEventListener('click', () => { if (confirm('Bạn có chắc muốn thoát bài kiểm tra?')) resetGame(); });
+        elements.nextBtn.addEventListener('click', nextQuestion);
+        // Note: Event listeners for result/review/certificate screens should be added here
+        // after their respective `build...` functions are created and called.
+    }
+
+    function showScreen(screenKey) {
+        const mainScreens = ['start-screen', 'mode-screen', 'result-area', 'review-screen'];
+        if (screenKey === 'quiz-container' || screenKey === 'certificate-screen') {
+            elements.main.classList.add('hidden');
+            elements.quizContainer.classList.toggle('hidden', screenKey !== 'quiz-container');
+            elements.certificateScreen.classList.toggle('hidden', screenKey !== 'certificate-screen');
+        } else {
+            elements.main.classList.remove('hidden');
+            elements.quizContainer.classList.add('hidden');
+            elements.certificateScreen.classList.add('hidden');
+            mainScreens.forEach(id => {
+                if(elements[id]) elements[id].classList.toggle('hidden', id !== screenKey);
+            });
+        }
+    }
+
+    function proceedToModeSelection() {
+        userInfo = { name: elements.nameInput.value.trim(), department: elements.departmentInput.value.trim() };
+        if (!userInfo.name || !userInfo.department) {
+            elements.infoErrorMessage.innerText = 'Vui lòng điền đầy đủ Họ và tên và Phòng ban.'; return;
+        }
+        elements.infoErrorMessage.innerText = '';
+        showScreen('mode-screen');
+    }
+
+    function startGame() {
+        if (!selectedMode || !selectedMode.mode) {
+            elements.modeErrorMessage.innerText = 'Vui lòng chọn một chế độ chơi.'; return;
+        }
+        elements.modeErrorMessage.innerText = '';
+        prepareQuestions();
+        if (questionsForGame.length === 0) {
+            elements.modeErrorMessage.innerText = 'Không có câu hỏi cho chế độ này.'; return;
+        }
+        showScreen('quiz-container');
+        showQuestion();
+    }
+    
+    function prepareQuestions() {
+        let source = [...quizDataForClient];
+        if (selectedMode.mode === 'topic') {
+            source = source.filter(q => q.topic === selectedMode.topic);
+            questionsForGame = shuffleArray(source).slice(0, 5);
+        } else {
+            source = shuffleArray(source);
+            if (selectedMode.count && selectedMode.count !== 'all') {
+                questionsForGame = source.slice(0, parseInt(selectedMode.count, 10));
+            } else { questionsForGame = source; }
+        }
+    }
+
+    function showQuestion() {
+        elements.feedbackPlaceholder.classList.remove('hidden');
+        elements.feedbackContent.classList.add('hidden');
+        elements.nextBtn.classList.add('hidden');
+        const q = questionsForGame[currentQuestionIndex];
+        elements.questionCount.innerText = `Câu ${currentQuestionIndex + 1}/${questionsForGame.length}`;
+        elements.progressBar.style.width = `${((currentQuestionIndex + 1) / questionsForGame.length) * 100}%`;
+        elements.questionText.innerText = q.question;
+        elements.answersContainer.innerHTML = '';
+        shuffleArray([...q.answers]).forEach(ans => {
+            const btn = document.createElement('button');
+            btn.innerHTML = `<span>${ans.text}</span>`;
+            btn.className = 'w-full text-left p-4 bg-white border-2 border-slate-300 rounded-lg hover:bg-blue-100 hover:border-kv-blue transition-all duration-200 flex items-center shadow-sm';
+            btn.dataset.answerId = ans.id;
+            btn.dataset.questionId = q.id;
+            btn.onclick = selectAnswer;
+            elements.answersContainer.appendChild(btn);
+        });
+    }
+
+    function selectAnswer(e) {
+        const selectedBtn = e.currentTarget;
+        const { questionId, answerId } = selectedBtn.dataset;
+        const isCorrect = answerId === answerKey[questionId];
+        const currentQ = questionsForGame[currentQuestionIndex];
+        const selectedAnswerObject = currentQ.answers.find(ans => ans.id === answerId);
+
+        gameResults.push({ question: currentQ, selectedAnswerId: answerId, correctAnswerId: answerKey[questionId], isCorrect });
+        
+        if (isCorrect) {
+            score++;
+            elements.scoreDisplay.innerText = `Điểm: ${score}`;
+            selectedBtn.classList.add('correct');
+        } else {
+            selectedBtn.classList.add('incorrect');
+        }
+        
+        elements.feedbackPlaceholder.classList.add('hidden');
+        const feedbackText = selectedAnswerObject.feedback;
+        if (feedbackText && feedbackText.trim() !== '') {
+            elements.feedbackContent.innerHTML = `
+                <div class="text-center">
+                    <i class="fas ${isCorrect ? 'fa-check-circle text-green-500' : 'fa-times-circle text-red-500'} text-5xl mb-4"></i>
+                    <p class="text-xl font-semibold ${isCorrect ? 'text-green-700' : 'text-red-700'}">${isCorrect ? 'Chính xác!' : 'Chưa đúng!'}</p>
+                    <p class="mt-2 text-slate-600">${feedbackText}</p>
+                </div>`;
+        } else {
+            elements.feedbackContent.innerHTML = `
+                <div class="text-center">
+                    <i class="fas ${isCorrect ? 'fa-check-circle text-green-500' : 'fa-times-circle text-red-500'} text-5xl"></i>
+                    <p class="mt-4 text-xl font-semibold ${isCorrect ? 'text-green-700' : 'text-red-700'}">${isCorrect ? 'Bạn đã trả lời đúng!' : 'Bạn đã trả lời sai.'}</p>
+                </div>`;
+        }
+        elements.feedbackContent.classList.remove('hidden');
+
+        Array.from(elements.answersContainer.children).forEach(button => button.onclick = null);
+        elements.nextBtn.classList.remove('hidden');
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        (currentQuestionIndex < questionsForGame.length) ? showQuestion() : showScore();
+    }
+    
+    function resetGame() {
+        currentQuestionIndex = 0; score = 0;
+        gameResults = []; questionsForGame = []; selectedMode = {}; userInfo = {};
+        if (document.querySelectorAll('.mode-btn').length > 0) {
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('mode-btn-selected'));
+        }
+        if(elements.scoreDisplay) elements.scoreDisplay.innerText = `Điểm: 0`;
+        if(elements.progressBar) elements.progressBar.style.width = '0%';
+        showScreen('start-screen');
+    }
+    
+    function showScore() {
+        const percentage = (score / questionsForGame.length) * 100;
+        const passed = percentage >= 80;
+        if (passed) confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
+        
+        elements.resultArea.innerHTML = `
+            <h2 class="text-3xl font-bold text-slate-800 mb-4">${passed ? "Xuất sắc!" : "Hoàn thành!"}</h2>
+            <p class="text-xl text-slate-600 mb-6">Bạn đã trả lời đúng ${score}/${questionsForGame.length} câu (${percentage.toFixed(0)}%)</p>
+            ${!passed ? `<div class="text-lg text-red-600 font-semibold mb-6">${feedbackMessages.fail}</div>` : ''}
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                 <button onclick="showReview()" class="btn btn-slate">Xem lại đáp án</button>
+                 ${passed ? `<button onclick="showCertificate()" class="btn btn-green">Xem giấy khen</button>` : ''}
+                 <button onclick="resetGame()" class="btn btn-blue">Chơi lại</button>
+            </div>`;
+        
+        showScreen('result-area');
+    }
+    
+    function showReview() {
+        let reviewHtml = `<h2 class="text-2xl font-bold text-center mb-6">Xem lại câu trả lời</h2><div class="space-y-6 max-h-[70vh] overflow-y-auto pr-4">`;
+        gameResults.forEach((result, index) => {
+            reviewHtml += `<div class="p-4 rounded-lg border ${result.isCorrect ? 'border-green-300 bg-green-50' : 'border-red-300 bg-red-50'}">
+                <p class="font-bold text-slate-800 mb-2">${index + 1}. ${result.question.question}</p>`;
+            result.question.answers.forEach(answer => {
+                let icon = '<i class="far fa-circle text-slate-400"></i>'; // Default
+                if (answer.id === result.correctAnswerId) {
+                    icon = '<i class="fas fa-check-circle text-green-500"></i>'; // Correct answer
+                }
+                if (answer.id === result.selectedAnswerId && !result.isCorrect) {
+                     icon = '<i class="fas fa-times-circle text-red-500"></i>'; // Incorrectly selected
+                }
+                reviewHtml += `<p class="flex items-center gap-2 pl-2 ${answer.id === result.correctAnswerId ? 'font-semibold text-slate-700' : 'text-slate-600'}">${icon} ${answer.text}</p>`;
+            });
+            reviewHtml += `</div>`;
+        });
+        reviewHtml += `</div><div class="text-center mt-6"><button onclick="showScreen('result-area')" class="btn btn-blue">Quay lại kết quả</button></div>`;
+        elements.reviewScreen.innerHTML = reviewHtml;
+        showScreen('review-screen');
+    }
+    
+    function showCertificate() {
+        const today = new Date();
+        const dateStr = `${today.getDate()} tháng ${today.getMonth() + 1}, ${today.getFullYear()}`;
+        elements.certificateScreen.innerHTML = `
+            <div class="relative w-full max-w-4xl bg-white p-4 rounded-lg shadow-2xl">
+                <button onclick="showScreen('result-area')" class="absolute top-2 right-2 text-white bg-black/30 rounded-full w-8 h-8 flex items-center justify-center hover:bg-black/50 transition-colors z-10"><i class="fas fa-times"></i></button>
+                <div class="border-4 border-yellow-500 p-8 text-center bg-slate-50 relative" style="background-image: url('https://www.transparenttextures.com/patterns/az-subtle.png');">
+                     <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" alt="KiotViet Logo" class="h-10 mx-auto mb-6">
+                    <h2 class="text-4xl font-bold text-yellow-800" style="font-family: 'Times New Roman', serif;">GIẤY CHỨNG NHẬN</h2>
+                    <p class="text-lg mt-4">Chứng nhận</p>
+                    <p class="text-3xl font-semibold text-kv-blue my-4">${userInfo.name}</p>
+                    <p class="text-lg">thuộc phòng ban <strong>${userInfo.department}</strong></p>
+                    <p class="text-lg mt-4">Đã hoàn thành xuất sắc bài kiểm tra <br><strong>${document.title}</strong></p>
+                    <p class="text-2xl font-bold my-4">Đạt ${score}/${questionsForGame.length} điểm (${((score / questionsForGame.length) * 100).toFixed(0)}%)</p>
+                    <p class="mt-8 text-slate-600"><em>Cấp ngày ${dateStr}</em></p>
+                </div>
+            </div>`;
+        showScreen('certificate-screen');
+    }
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
     </script></body></html>
