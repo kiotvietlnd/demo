@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Management - Hướng Dẫn & Chiến Lược (Full Document)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; line-height: 1.6; }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Sidebar */
+        .nav-item.active {
+            background-color: #eff6ff;
+            color: #166def;
+            border-right: 4px solid #166def;
+            font-weight: 600;
+        }
+        
+        /* Animation */
+        .content-section { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .content-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Layout Components */
+        .card { background: white; border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1.5rem; border: 1px solid #e2e8f0; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+        
+        .hero-img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 0.75rem;
+            margin-bottom: 2rem;
+            margin-top: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+        }
+        .section-title i { margin-right: 0.75rem; color: #166def; }
+
+        /* Hardware/System Grid */
+        .hw-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+        .hw-card { border: 1px solid #e2e8f0; border-radius: 0.5rem; padding: 1rem; text-align: left; transition: all 0.2s; background: #fff; }
+        .hw-card:hover { border-color: #60a5fa; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+        .hw-img { height: 60px; width: 60px; object-fit: contain; margin-bottom: 0.75rem; display: block; }
+        .hw-icon { font-size: 2rem; color: #3b82f6; margin-bottom: 1rem; display: block;}
+
+        /* Table */
+        .kv-table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; font-size: 0.95rem; }
+        .kv-table th { background-color: #f1f5f9; color: #334155; font-weight: 700; padding: 0.75rem; text-align: left; border: 1px solid #e2e8f0; }
+        .kv-table td { padding: 0.75rem; border: 1px solid #e2e8f0; vertical-align: top; }
+
+        /* Accordion */
+        details { border: 1px solid #e2e8f0; border-radius: 0.5rem; margin-bottom: 0.5rem; background: white; }
+        details summary { padding: 1rem; cursor: pointer; font-weight: 600; list-style: none; display: flex; justify-content: space-between; align-items: center; background-color: #f8fafc; transition: 0.2s; }
+        details summary:hover { background-color: #f1f5f9; color: #166def; }
+        details[open] summary { border-bottom: 1px solid #e2e8f0; color: #166def; }
+        .details-body { padding: 1.25rem; color: #475569; }
+        .details-body strong { color: #334155; }
+
+        /* ROI Box Styling */
+        .roi-box { border-radius: 0.5rem; padding: 1.25rem; margin-top: 1rem; border: 1px solid; background-color: #f0f9ff; border-color: #bae6fd; }
+        .roi-header { font-weight: 700; color: #0369a1; margin-bottom: 1rem; font-size: 1.1rem; border-bottom: 1px solid #bae6fd; padding-bottom: 0.5rem; }
+        .roi-section { margin-bottom: 1rem; }
+        .roi-section h6 { font-weight: 700; font-size: 0.9rem; color: #334155; margin-bottom: 0.25rem; }
+        .roi-list { list-style-type: none; padding-left: 0; font-size: 0.9rem; color: #475569; }
+        .roi-list li { display: flex; justify-content: space-between; padding: 2px 0; }
+        .roi-list li strong { color: #0f172a; }
+        
+        .roi-sublist { list-style-type: none; padding-left: 0.75rem; margin-top: 0.25rem; margin-bottom: 0.5rem; border-left: 2px solid #cbd5e1; font-size: 0.85rem; color: #64748b; }
+        .roi-sublist li { display: flex; justify-content: space-between; padding: 1px 0; }
+        .roi-sublist li span:last-child { font-weight: 500; color: #475569; }
+
+        .roi-total { border-top: 1px dashed #94a3b8; margin-top: 0.5rem; padding-top: 0.5rem; font-weight: 700; color: #b91c1c; display: flex; justify-content: space-between; font-size: 1rem; }
+        .roi-note { font-size: 0.75rem; font-style: italic; color: #64748b; margin-top: 0.5rem; }
+        .roi-conclusion { background: #0ea5e9; color: white; padding: 0.5rem; text-align: center; border-radius: 0.375rem; font-weight: 700; margin-top: 1rem; }
+
+        /* Tags */
+        .tag { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .tag-blue { background: #dbeafe; color: #1e40af; }
+        .tag-green { background: #dcfce7; color: #166534; }
+        .tag-red { background: #fee2e2; color: #991b1b; }
+        .tag-yellow { background: #fef9c3; color: #854d0e; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    <!-- SIDEBAR -->
+    <aside class="w-72 bg-white border-r border-slate-200 flex-col hidden md:flex shadow-xl z-20">
+        <div class="p-5 border-b border-slate-100 flex justify-center items-center">
+            <h2 class="text-xl font-bold text-blue-700"><i class="fa-solid fa-brain mr-2"></i>KM SYSTEM</h2>
+        </div>
+        <nav class="flex-1 overflow-y-auto py-4">
+            <ul class="space-y-1 text-sm font-medium text-slate-600">
+                <li><button onclick="showTab('overview')" class="nav-item active w-full text-left px-6 py-3 hover:bg-slate-50 flex items-center transition"><i class="fa-solid fa-compass w-5 mr-2"></i> Tổng Quan (Overview)</button></li>
+                
+                <div class="px-6 py-2 text-xs font-bold text-slate-400 uppercase mt-2">I. NGUYÊN TẮC (Principles)</div>
+                <li><button onclick="showTab('topic1')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-50 flex items-center transition"><i class="fa-solid fa-layer-group w-5 mr-2"></i> 1. Định nghĩa & Phân loại</button></li>
+                <li><button onclick="showTab('topic2')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-50 flex items-center transition"><i class="fa-solid fa-network-wired w-5 mr-2"></i> 2. Các Thành tố KM</button></li>
+                
+                <div class="px-6 py-2 text-xs font-bold text-slate-400 uppercase mt-2">II. CHIẾN LƯỢC & THỰC THI</div>
+                <li><button onclick="showTab('topic3')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-50 flex items-center transition"><i class="fa-solid fa-chess-board w-5 mr-2"></i> 3. Thiết kế Chiến lược</button></li>
+                <li><button onclick="showTab('topic4')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-50 flex items-center transition"><i class="fa-solid fa-tools w-5 mr-2"></i> 4. 10 Chiến lược & Hệ thống</button></li>
+                
+                <div class="px-6 py-2 text-xs font-bold text-slate-400 uppercase mt-2">III. GIÁM TUYỂN & GIÁ TRỊ</div>
+                <li><button onclick="showTab('topic5')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-50 flex items-center transition"><i class="fa-solid fa-filter w-5 mr-2"></i> 5. Giám tuyển Nội dung</button></li>
+                <li><button onclick="showTab('topic6')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-50 flex items-center transition"><i class="fa-solid fa-chart-line w-5 mr-2"></i> 6. Lợi ích & ROI</button></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- MOBILE HEADER -->
+    <div class="md:hidden fixed top-0 left-0 w-full bg-white shadow z-30 flex items-center justify-between p-4">
+        <span class="font-bold text-blue-700"><i class="fa-solid fa-brain mr-2"></i>KM SYSTEM</span>
+        <button onclick="toggleMenu()" class="text-slate-600"><i class="fa-solid fa-bars text-2xl"></i></button>
+    </div>
+    <div id="mobile-menu" class="fixed inset-0 bg-slate-900/50 z-40 hidden" onclick="toggleMenu()">
+        <div class="bg-white w-72 h-full overflow-y-auto p-4" onclick="event.stopPropagation()" id="mobile-list-container"></div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 overflow-y-auto p-4 md:p-8 mt-14 md:mt-0 bg-slate-50" id="main-scroll">
+        
+        <!-- ================== OVERVIEW ================== -->
+        <div id="overview" class="content-section active max-w-6xl mx-auto">
+            <div class="card border-l-8 border-blue-600">
+                <h1 class="text-3xl font-bold text-slate-800 mb-4">Quản Trị Tri Thức (Knowledge Management - KM)</h1>
+                <p class="text-slate-600 text-lg mb-4">
+                    KM là phương pháp hệ thống nhằm đạt được mục tiêu tổ chức thông qua việc <strong>tạo ra, nắm bắt, giám tuyển, chia sẻ và quản lý</strong> tri thức. Mục tiêu cốt lõi: Đảm bảo "đúng thông tin, đến đúng người, vào đúng thời điểm".
+                </p>
+                <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop" class="hero-img mt-0" alt="KM Overview">
+            </div>
+
+            <h2 class="section-title">NỀN TẢNG CƠ BẢN (2.5.1)</h2>
+            
+            <!-- Nhóm Định nghĩa -->
+            <div class="card">
+                <h3 class="text-xl font-bold text-blue-700 mb-4">Sự khác biệt: Dữ liệu - Thông tin - Tri thức</h3>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="bg-slate-50 p-4 rounded border border-slate-200">
+                        <div class="flex items-center mb-2"><i class="fa-solid fa-database text-gray-500 mr-2"></i> <h4 class="font-bold text-slate-800">DATA (Dữ liệu)</h4></div>
+                        <p class="text-sm text-slate-600 mt-1">Sự thật thô, chưa tổ chức. Không có ngữ cảnh.</p>
+                        <p class="text-xs text-gray-500 mt-2 italic">Ví dụ: Con số "35", "45".</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded border border-slate-200">
+                        <div class="flex items-center mb-2"><i class="fa-solid fa-file-lines text-blue-500 mr-2"></i> <h4 class="font-bold text-slate-800">INFORMATION (Thông tin)</h4></div>
+                        <p class="text-sm text-slate-600 mt-1">Dữ liệu đã được phân loại, tính toán và đặt vào ngữ cảnh.</p>
+                        <p class="text-xs text-gray-500 mt-2 italic">Ví dụ: "Nhân viên A: 35 tuổi". Trả lời cho câu hỏi Ai, Cái gì, Ở đâu.</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded border border-slate-200">
+                        <div class="flex items-center mb-2"><i class="fa-solid fa-lightbulb text-yellow-500 mr-2"></i> <h4 class="font-bold text-slate-800">KNOWLEDGE (Tri thức)</h4></div>
+                        <p class="text-sm text-slate-600 mt-1">Gắn liền với hành động và sự hiểu biết. Là sản phẩm của kinh nghiệm.</p>
+                        <p class="text-xs text-gray-500 mt-2 italic">Ví dụ: Biết rằng một người không thể vừa 35 vừa 45 tuổi để xử lý lỗi.</p>
+                    </div>
+                </div>
+            </div>
+
+             <!-- Sơ đồ nhanh -->
+             <div class="card">
+                <h3 class="text-xl font-bold text-purple-700 mb-2">Vai trò của chuyên gia TD (Talent Development)</h3>
+                <ul class="list-disc list-inside text-slate-600">
+                    <li>Hiểu nguyên tắc KM để phát triển nhân tài.</li>
+                    <li>Phân biệt các loại tri thức để chọn phương pháp đào tạo.</li>
+                    <li>Kết nối KM với Hiệu suất (Performance Improvement).</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ================== TOPIC 1: ĐỊNH NGHĨA & PHÂN LOẠI ================== -->
+        <div id="topic1" class="content-section max-w-6xl mx-auto">
+            <div class="card border-t-4 border-green-500">
+                <h1 class="text-3xl font-bold text-slate-800">1. Định nghĩa & Phân loại Tri thức</h1>
+                <p class="text-slate-600 mt-2">Để quản lý hiệu quả, cần phân biệt rõ ràng các dạng tri thức tồn tại trong tổ chức.</p>
+            </div>
+
+            <h3 class="section-title"><i class="fa-solid fa-scale-balanced"></i>I. HAI LOẠI HÌNH TRI THỨC CỐT LÕI</h3>
+            <div class="card">
+                <table class="kv-table">
+                    <thead><tr><th style="width: 50%">Tri thức Hiện nổi (Explicit Knowledge)</th><th>Tri thức Tiềm ẩn (Tacit Knowledge)</th></tr></thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <span class="tag tag-blue">Know-what</span><br>
+                                <strong>Đặc điểm:</strong> Dễ dàng xác định, lưu trữ, truy xuất. Được nắm bắt trong các hệ thống thông tin.
+                            </td>
+                            <td>
+                                <span class="tag tag-yellow">Know-how</span><br>
+                                <strong>Đặc điểm:</strong> Dựa trên kinh nghiệm, trực giác. Nằm trong đầu con người. Khó định nghĩa và truyền đạt.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ví dụ:</strong> Cơ sở dữ liệu, tài liệu quy trình, bản ghi nhớ, sách hướng dẫn.</td>
+                            <td><strong>Ví dụ:</strong> Niềm tin văn hóa, kỹ năng phán đoán, kinh nghiệm xử lý tình huống khó.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Quản lý bởi:</strong> Hệ thống CNTT, Quản lý tài liệu.</td>
+                            <td><strong>Quản lý bởi:</strong> Cộng đồng thực hành, Mentoring, Văn hóa chia sẻ.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="mt-4 text-sm text-gray-600 italic">*Lưu ý: Tri thức tiềm ẩn (Tacit) được coi là nguồn tri thức giá trị nhất, thường dẫn đến sự đột phá và lợi thế cạnh tranh bền vững.</p>
+            </div>
+
+            <h3 class="section-title"><i class="fa-solid fa-sitemap"></i>II. CÁC NGUỒN TRI THỨC TỔ CHỨC</h3>
+            <div class="space-y-2">
+                <details><summary>1. Individual Knowledge (Cá nhân)</summary><div class="details-body">Tri thức cá nhân, thường là tiềm ẩn (chuyên môn riêng) nhưng có thể hiện nổi nếu được ghi chép lại trong sổ tay cá nhân.</div></details>
+                <details><summary>2. Group/Community Knowledge (Nhóm)</summary><div class="details-body">Được nắm giữ bởi một nhóm nhưng chưa chia sẻ rộng rãi với toàn tổ chức.</div></details>
+                <details><summary>3. Structural Knowledge (Cấu trúc)</summary><div class="details-body">Nhúng vào quy trình, thói quen và văn hóa của tổ chức ("DNA của doanh nghiệp").</div></details>
+                <details><summary>4. Organizational Knowledge (Tổ chức)</summary><div class="details-body">Tổng hợp tất cả tri thức có thể truy cập được khi các yếu tố khác kết hợp lại tạo thành tri thức mới.</div></details>
+                <details><summary>5. Extra-organizational Knowledge</summary><div class="details-body">Tồn tại bên ngoài tổ chức (khách hàng, đối tác, thị trường).</div></details>
+            </div>
+        </div>
+
+        <!-- ================== TOPIC 2: CÁC THÀNH TỐ KM ================== -->
+        <div id="topic2" class="content-section max-w-6xl mx-auto">
+            <div class="card border-t-4 border-orange-500">
+                <h1 class="text-3xl font-bold text-slate-800">2. Các Thành tố Quản trị Tri thức</h1>
+                <p class="text-slate-600 mt-2">Vòng đời của KM bao gồm 4 yếu tố chính mà chuyên gia TD cần nắm vững.</p>
+            </div>
+
+            <div class="hw-grid">
+                <div class="hw-card">
+                    <i class="fa-solid fa-lightbulb hw-icon text-yellow-500"></i>
+                    <h4 class="font-bold text-lg mb-2">1. Tạo lập & Nắm bắt</h4>
+                    <p class="text-sm text-slate-600">Xác định nơi tri thức được tạo ra và cách "bắt" nó lại để tái sử dụng. Kỹ thuật: <strong>Knowledge Mapping</strong>.</p>
+                </div>
+                <div class="hw-card">
+                    <i class="fa-solid fa-pen-to-square hw-icon text-green-500"></i>
+                    <h4 class="font-bold text-lg mb-2">2. Giám tuyển & Làm giàu</h4>
+                    <p class="text-sm text-slate-600">Xác nhận độ chính xác, thêm ngữ cảnh cần thiết. Quyết định xem tri thức này cần thiết ở đâu.</p>
+                </div>
+                <div class="hw-card">
+                    <i class="fa-solid fa-server hw-icon text-blue-500"></i>
+                    <h4 class="font-bold text-lg mb-2">3. Lưu trữ & Truy xuất</h4>
+                    <p class="text-sm text-slate-600">Cơ chế lưu trữ (hệ thống IT) và cách thức tìm kiếm để người dùng lấy được thông tin.</p>
+                </div>
+                <div class="hw-card">
+                    <i class="fa-solid fa-share-nodes hw-icon text-purple-500"></i>
+                    <h4 class="font-bold text-lg mb-2">4. Phổ biến (Dissemination)</h4>
+                    <p class="text-sm text-slate-600">Quy trình chia sẻ, bao gồm cộng tác, cộng đồng thực hành (CoP) và mạng lưới đồng cấp.</p>
+                </div>
+            </div>
+
+            <h3 class="section-title mt-8"><i class="fa-solid fa-link"></i>LIÊN KẾT VỚI HIỆU SUẤT (PERFORMANCE)</h3>
+            <div class="card bg-blue-50 border-blue-200">
+                <p class="mb-4">Tri thức chỉ có giá trị khi được liên kết với hành động công việc. TD cần xác định loại tri thức nào cần thiết dựa trên:</p>
+                <ul class="list-disc list-inside space-y-2 text-slate-700">
+                    <li><strong>Internalized (Đã học):</strong> Cần thiết khi phải phản ứng ngay lập tức (Speed of performance).</li>
+                    <li><strong>External (Truy cập):</strong> Lưu trong hệ thống, dùng khi có thời gian tra cứu.</li>
+                </ul>
+                <div class="mt-4 p-3 bg-white rounded border border-blue-100 text-sm">
+                    <strong>Ví dụ Tay đua xe:</strong> Họ có thể học về thủy lực phanh (lý thuyết), nhưng để thắng đua, họ cần tri thức thực tế: "Nhấn phanh khi nào, bao lâu khi vào cua".
+                </div>
+            </div>
+        </div>
+
+        <!-- ================== TOPIC 3: THIẾT KẾ CHIẾN LƯỢC ================== -->
+        <div id="topic3" class="content-section max-w-6xl mx-auto">
+            <div class="card border-t-4 border-purple-600">
+                <h1 class="text-3xl font-bold text-slate-800">3. Thiết kế & Triển khai Chiến lược KM (2.5.3)</h1>
+                <p class="text-slate-600 mt-2">KM không chỉ là công nghệ, đó là Con người, Quy trình và Văn hóa.</p>
+            </div>
+
+            <h3 class="section-title"><i class="fa-solid fa-people-carry-box"></i>I. VĂN HÓA & CON NGƯỜI</h3>
+            <div class="grid md:grid-cols-2 gap-4 mb-6">
+                <div class="card border-l-4 border-red-500">
+                    <h4 class="font-bold mb-2 text-red-700">Thái độ của Quản lý</h4>
+                    <p class="text-sm mb-2">Sự ủng hộ của lãnh đạo là tối quan trọng.</p>
+                    <ul class="list-disc list-inside text-sm text-slate-600">
+                        <li>Tham gia tích cực, không chỉ cấp ngân sách.</li>
+                        <li>Mantra: <em>"Document, participate, and when in doubt, participate and document."</em></li>
+                        <li>Biến KM thành công cụ giúp việc dễ dàng hơn, không phải việc làm thêm.</li>
+                    </ul>
+                </div>
+                <div class="card border-l-4 border-indigo-500">
+                    <h4 class="font-bold mb-2 text-indigo-700">Khen thưởng & Khích lệ</h4>
+                    <p class="text-sm mb-2">Thúc đẩy hành vi chia sẻ qua cơ chế:</p>
+                    <ul class="list-disc list-inside text-sm text-slate-600">
+                        <li>Đưa vào mô tả công việc (VD: đóng góp 3 bài/quý).</li>
+                        <li>Đánh giá định kỳ & thưởng nóng (Spot bonuses).</li>
+                        <li>Gamification (Thử thách & Huy hiệu).</li>
+                        <li>Liên kết với đánh giá hiệu suất (Appraisals).</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 class="section-title"><i class="fa-solid fa-diagram-project"></i>II. QUY TRÌNH KINH DOANH</h3>
+            <div class="card">
+                <h4 class="font-bold mb-2">Kết nối Nhu cầu Tri thức với Quy trình làm việc</h4>
+                <p class="mb-4 text-justify">TD professionals cần chồng bản đồ KM (Knowledge Map) lên bản đồ quy trình công việc (Process Map). Điều này giúp xác định:</p>
+                <div class="bg-slate-100 p-4 rounded text-sm">
+                    <strong>Mục tiêu:</strong> Cung cấp đúng tri thức tại thời điểm người lao động cần trong quy trình.
+                    <br><strong>Phương pháp:</strong> Ưu tiên các quy trình quan trọng (Critical processes) đóng góp giá trị lớn nhất, sau đó kết nối nguồn tri thức vào các điểm nút này.
+                </div>
+            </div>
+        </div>
+
+        <!-- ================== TOPIC 4: CHIẾN LƯỢC & HỆ THỐNG ================== -->
+        <div id="topic4" class="content-section max-w-6xl mx-auto">
+            <div class="card border-t-4 border-pink-500">
+                <h1 class="text-3xl font-bold text-slate-800">4. 10 Chiến Lược Thực Thi & Hệ Thống KM</h1>
+            </div>
+
+            <h3 class="section-title"><i class="fa-solid fa-list-check"></i>I. 10 CHIẾN LƯỢC (Huang, Lee, Wang)</h3>
+            <div class="space-y-2">
+                <details><summary>1. Thiết lập phương pháp luận (Methodology)</summary><div class="details-body">Quy định chính sách, quy tắc, kỹ thuật thực hiện KM.</div></details>
+                <details><summary>2. Chỉ định người phụ trách</summary><div class="details-body">Bổ nhiệm Giám đốc Tri thức (CKO) để quản lý hoạt động.</div></details>
+                <details><summary>3. Trao quyền cho Knowledge Workers</summary><div class="details-body">Cho phép và hỗ trợ nhân viên tham gia, chia sẻ.</div></details>
+                <details><summary>4. Nắm bắt tri thức hướng khách hàng</summary><div class="details-body">Học hỏi TỪ khách hàng và VỀ khách hàng.</div></details>
+                <details><summary>5. Quản lý năng lực cốt lõi</summary><div class="details-body">Xác định những gì tổ chức làm tốt nhất (khó sao chép).</div></details>
+                <details><summary>6. Thúc đẩy hợp tác & đổi mới</summary><div class="details-body">Nhấn mạnh làm việc nhóm. Quan trọng cho chu trình SECI.</div></details>
+                <details><summary>7. Học từ Best Practices</summary><div class="details-body">Ghi lại và chia sẻ các phương pháp tốt nhất để tránh "phát minh lại bánh xe".</div></details>
+                <details><summary>8. Mở rộng nguồn tri thức</summary><div class="details-body">Sử dụng Internet, Intranet, Extranet để lấy và phân phối tin.</div></details>
+                <details><summary>9. Kết nối cộng đồng chuyên môn</summary><div class="details-body">Liên kết chuyên gia nội bộ và bên ngoài (Virtual communities).</div></details>
+                <details><summary>10. Đo lường giá trị</summary><div class="details-body">Báo cáo hiệu quả và đóng góp của KM đối với tổ chức.</div></details>
+            </div>
+
+            <h3 class="section-title mt-8"><i class="fa-solid fa-server"></i>II. CÁC LOẠI HỆ THỐNG KM</h3>
+            <p class="mb-4 text-slate-600">Bất kỳ hệ thống CNTT nào hỗ trợ cộng tác, lưu trữ, và quy trình KM đều là hệ thống KM.</p>
+            <div class="hw-grid">
+                <div class="hw-card">
+                    <span class="font-bold text-blue-600">Groupware</span>
+                    <p class="text-xs mt-1">Hỗ trợ làm việc nhóm (Local/Remote).</p>
+                </div>
+                <div class="hw-card">
+                    <span class="font-bold text-blue-600">Intranet/Extranet</span>
+                    <p class="text-xs mt-1">Mạng chia sẻ nội bộ/mở rộng.</p>
+                </div>
+                <div class="hw-card">
+                    <span class="font-bold text-blue-600">Business Intelligence</span>
+                    <p class="text-xs mt-1">Data warehousing, mining, OLAP.</p>
+                </div>
+                <div class="hw-card">
+                    <span class="font-bold text-blue-600">Decision Support</span>
+                    <p class="text-xs mt-1">Hỗ trợ ra quyết định.</p>
+                </div>
+                <div class="hw-card">
+                    <span class="font-bold text-blue-600">Content Management</span>
+                    <p class="text-xs mt-1">CMS: Quản lý nội dung số.</p>
+                </div>
+                <div class="hw-card">
+                    <span class="font-bold text-blue-600">Document Management</span>
+                    <p class="text-xs mt-1">DMS: Quản lý tài liệu văn bản.</p>
+                </div>
+                <div class="hw-card">
+                    <span class="font-bold text-blue-600">AI Tools</span>
+                    <p class="text-xs mt-1">Tìm kiếm, tối ưu hóa tri thức.</p>
+                </div>
+                <div class="hw-card">
+                    <span class="font-bold text-blue-600">Semantic Networks</span>
+                    <p class="text-xs mt-1">Bản đồ kết nối các ý tưởng.</p>
+                </div>
+            </div>
+
+            <h3 class="section-title mt-8"><i class="fa-solid fa-headset"></i>III. HỖ TRỢ NGƯỜI DÙNG</h3>
+            <div class="grid grid-cols-3 gap-4 text-center">
+                <div class="bg-white p-4 rounded border"><i class="fa-solid fa-user-check text-2xl text-green-500 mb-2"></i><br><b>Peer KM Champions</b><br><span class="text-xs">Đại sứ KM tại chỗ</span></div>
+                <div class="bg-white p-4 rounded border"><i class="fa-solid fa-book-open text-2xl text-blue-500 mb-2"></i><br><b>KM Self-help</b><br><span class="text-xs">FAQs, Knowledge Base</span></div>
+                <div class="bg-white p-4 rounded border"><i class="fa-solid fa-phone text-2xl text-red-500 mb-2"></i><br><b>Help Desk</b><br><span class="text-xs">Hỗ trợ qua IT/Phone</span></div>
+            </div>
+        </div>
+
+        <!-- ================== TOPIC 5: GIÁM TUYỂN NỘI DUNG ================== -->
+        <div id="topic5" class="content-section max-w-6xl mx-auto">
+            <div class="card border-t-4 border-red-500">
+                <h1 class="text-3xl font-bold text-slate-800">5. Kỹ năng Giám tuyển Nội dung (Curation) (2.5.7)</h1>
+                <p class="text-slate-600 mt-2">TD professionals cần đánh giá và lọc nội dung từ nhiều nguồn để hỗ trợ hệ thống tri thức.</p>
+            </div>
+
+            <div class="card">
+                <h3 class="text-xl font-bold text-slate-800 mb-4">Các loại nội dung cần giám tuyển</h3>
+                <div class="space-y-3">
+                    <div class="p-3 border rounded hover:bg-slate-50">
+                        <h4 class="font-bold text-red-600">Instructional Content (Nội dung hướng dẫn)</h4>
+                        <p class="text-sm">Cần review chu kỳ sống, thời hạn sử dụng và tính ứng dụng.</p>
+                    </div>
+                    <div class="p-3 border rounded hover:bg-slate-50">
+                        <h4 class="font-bold text-blue-600">User-generated Content (Người dùng tạo)</h4>
+                        <p class="text-sm">Cần chuyên gia (SME) review, quy trình duyệt, thông báo và gỡ bỏ khi lỗi thời.</p>
+                    </div>
+                    <div class="p-3 border rounded hover:bg-slate-50">
+                        <h4 class="font-bold text-green-600">SME-generated Content (Chuyên gia tạo)</h4>
+                        <p class="text-sm">Quy trình duyệt cấp 2, lưu trữ và cấp quyền truy cập.</p>
+                    </div>
+                    <div class="p-3 border rounded hover:bg-slate-50">
+                        <h4 class="font-bold text-purple-600">External Content (Bên ngoài/Public)</h4>
+                        <p class="text-sm">Quyết định đưa vào, quyền truy cập, vấn đề pháp lý và từ chối trách nhiệm (disclaimers).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================== TOPIC 6: LỢI ÍCH & ROI ================== -->
+        <div id="topic6" class="content-section max-w-6xl mx-auto">
+            <div class="card border-t-4 border-yellow-500">
+                <h1 class="text-3xl font-bold text-slate-800">6. Giá trị & Lợi ích của KM</h1>
+            </div>
+
+            <!-- ROI SECTION -->
+            <div class="roi-box">
+                <h3 class="roi-header">Bài toán Giá trị (The Value of KM)</h3>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="roi-section">
+                        <h6 class="text-green-700">Lợi ích Chiến lược (Strategic)</h6>
+                        <ul class="roi-list">
+                            <li><i class="fa-solid fa-check text-green-500 mr-2"></i> Tăng cường ra quyết định dựa trên chuyên môn.</li>
+                            <li><i class="fa-solid fa-check text-green-500 mr-2"></i> Cải thiện đổi mới & hợp tác (phá bỏ silos).</li>
+                            <li><i class="fa-solid fa-check text-green-500 mr-2"></i> Giảm mất mát tri thức chuyên gia (khi họ nghỉ việc).</li>
+                            <li><i class="fa-solid fa-check text-green-500 mr-2"></i> Khai thác cơ hội thị trường nhanh hơn.</li>
+                        </ul>
+                    </div>
+
+                    <div class="roi-section">
+                        <h6 class="text-blue-700">Lợi ích Chiến thuật (Tactical)</h6>
+                        <ul class="roi-list">
+                            <li><i class="fa-solid fa-check text-blue-500 mr-2"></i> Chia sẻ Best Practices an toàn.</li>
+                            <li><i class="fa-solid fa-check text-blue-500 mr-2"></i> Tái sử dụng sáng kiến, tránh làm lại (rework).</li>
+                            <li><i class="fa-solid fa-check text-blue-500 mr-2"></i> Tăng năng suất, giảm thời gian đạt năng lực (Time to competence).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="roi-total mt-4">
+                    <span>LỢI ÍCH CHO TD PROFESSIONALS:</span>
+                </div>
+                <div class="bg-white p-3 rounded mt-2 text-sm text-slate-700 border">
+                    <ul class="list-disc list-inside">
+                        <li>Nhúng việc học vào chuỗi thông tin tổ chức (Ecosystem).</li>
+                        <li>Nâng cao chất lượng và năng suất giải pháp đào tạo.</li>
+                        <li>Tạo niềm tin vào nguồn tri thức đã được giám tuyển.</li>
+                        <li><strong>Giảm chi phí đào tạo</strong> (Tập trung ít nguồn lực hơn vào việc chia sẻ lại cái đã có).</li>
+                    </ul>
+                </div>
+
+                <div class="roi-conclusion">
+                    KM biến "Tài sản vô hình" thành "Lợi thế cạnh tranh"
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        function showTab(id) {
+            document.querySelectorAll('.content-section').forEach(el => el.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            
+            // Active sidebar
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            const desktopBtn = document.querySelector(`aside button[onclick="showTab('${id}')"]`);
+            if(desktopBtn) desktopBtn.classList.add('active');
+
+            // Close mobile menu
+            document.getElementById('mobile-menu').classList.add('hidden');
+            
+            // Scroll top
+            document.getElementById('main-scroll').scrollTop = 0;
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const container = document.getElementById('mobile-list-container');
+            
+            if (menu.classList.contains('hidden')) {
+                if (container.children.length === 0) {
+                    const links = document.querySelectorAll('aside nav ul li');
+                    links.forEach(li => {
+                        const clone = li.cloneNode(true);
+                        const btn = clone.querySelector('button');
+                        btn.className = "w-full text-left px-4 py-3 border-b border-slate-100 text-slate-700 block";
+                        container.appendChild(clone);
+                    });
+                }
+                menu.classList.remove('hidden');
+            } else {
+                menu.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
