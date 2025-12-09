@@ -63,13 +63,13 @@
 
             html, body { 
                 width: 13.33in;
-                height: 7.5in;
+                height: auto; /* Sửa: Để auto thay vì cố định 7.5in để in được nhiều trang */
                 background-color: white; 
                 margin: 0 !important; 
                 padding: 0 !important;
                 -webkit-print-color-adjust: exact; 
                 print-color-adjust: exact;
-                overflow: hidden; /* Ẩn thanh cuộn */
+                overflow: visible; /* Sửa: Để visible thay vì hidden để không bị cắt trang */
             }
 
             .slide-container {
