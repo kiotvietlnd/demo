@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>In Slide Nhà Thuốc</title>
+    <title>Slide Nhà Thuốc 16:9</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -19,20 +19,21 @@
             padding: 20px; 
         }
 
-        /* Định dạng từng Slide */
+        /* Định dạng từng Slide - Kích thước chuẩn 16:9 (1280x720 hoặc tỉ lệ tương đương) */
         .slide { 
             position: relative;
-            width: 1122.5px; /* Tương đương khổ A4 ngang (297mm) ở 96dpi */
-            height: 793.7px; /* Tương đương khổ A4 ngang (210mm) ở 96dpi */
+            /* Kích thước hiển thị trên web */
+            width: 1280px; 
+            height: 720px;
             background-color: white;
-            display: flex; /* Luôn hiện để in */
+            display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
             overflow: hidden;
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            page-break-after: always; /* Ngắt trang sau mỗi slide */
+            page-break-after: always;
         }
 
         /* Nội dung bên trong */
@@ -47,33 +48,49 @@
             align-items: center; 
         }
 
-        /* Xử lý ngắt từ */
         h1, h2, h3, h4, p, li, span { 
             word-wrap: break-word; 
             overflow-wrap: break-word; 
         }
 
-        /* --- CẤU HÌNH RIÊNG KHI IN --- */
+        /* --- CẤU HÌNH IN ẤN (QUAN TRỌNG) --- */
         @media print {
-            body { 
-                background-color: white; 
-                -webkit-print-color-adjust: exact; /* Bắt buộc in màu nền */
-                print-color-adjust: exact;
+            /* Thiết lập khổ giấy in là 13.33 inch x 7.5 inch (Chuẩn 16:9 PPT) */
+            @page {
+                size: 13.33in 7.5in; 
+                margin: 0; 
             }
+
+            html, body { 
+                width: 13.33in;
+                height: 7.5in;
+                background-color: white; 
+                margin: 0 !important; 
+                padding: 0 !important;
+                -webkit-print-color-adjust: exact; 
+                print-color-adjust: exact;
+                overflow: hidden; /* Ẩn thanh cuộn */
+            }
+
             .slide-container {
                 gap: 0;
                 padding: 0;
                 display: block;
+                width: 13.33in;
             }
+
             .slide {
-                box-shadow: none; /* Bỏ bóng khi in */
+                box-shadow: none; 
                 border: none;
-                width: 100%;
-                height: 100vh; /* Full chiều cao trang giấy */
+                /* Ép kích thước slide bằng đúng khổ giấy */
+                width: 13.33in !important;
+                height: 7.5in !important;
                 page-break-after: always;
                 page-break-inside: avoid;
+                margin: 0 !important;
             }
-            /* Ẩn các nút điều hướng nếu có */
+            
+            /* Ẩn các phần tử thừa nếu có */
             .no-print { display: none !important; }
         }
     </style>
@@ -82,40 +99,40 @@
     <div class="slide-container">
         <!-- Slide Bìa -->
         <section class="slide bg-gradient-to-br from-blue-700 to-blue-900">
-            <img class="absolute top-[100px] left-1/2 -translate-x-1/2 h-12 w-auto" src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal-White.svg">
-            <div class="w-[calc(100%-100px)] h-[calc(100%-100px)] border-4 border-white rounded-xl flex flex-col justify-center items-center p-8">
-                <h1 class="text-7xl font-bold text-white">Ngành Nhà thuốc</h1>
-                <p class="mt-6 text-3xl text-blue-200">Giải pháp quản lý bán hàng toàn diện</p>
+            <img class="absolute top-[100px] left-1/2 -translate-x-1/2 h-16 w-auto" src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal-White.svg">
+            <div class="w-[calc(100%-150px)] h-[calc(100%-150px)] border-4 border-white rounded-xl flex flex-col justify-center items-center p-8">
+                <h1 class="text-8xl font-bold text-white">Ngành Nhà thuốc</h1>
+                <p class="mt-8 text-4xl text-blue-200">Giải pháp quản lý bán hàng toàn diện</p>
             </div>
         </section>
 
         <!-- Slide Giới thiệu chung -->
         <section class="slide bg-white">
-            <img class="absolute top-10 right-10 h-10 w-auto" src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg">
+            <img class="absolute top-10 right-10 h-12 w-auto" src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg">
             <div class="slide-content-wrapper text-left max-w-6xl mx-auto">
-                <h2 class="text-5xl font-bold text-blue-900 mb-8">Giới thiệu giải pháp chuyên ngành Dược</h2>
+                <h2 class="text-6xl font-bold text-blue-900 mb-10">Giới thiệu giải pháp chuyên ngành Dược</h2>
                 <p class="text-3xl text-gray-600 leading-relaxed text-justify">KiotViet đã phát triển một bộ tính năng chuyên biệt cho ngành Dược, giúp các nhà thuốc vận hành hiệu quả, an toàn và tuân thủ quy định của Bộ Y tế. Đây là giải pháp toàn diện từ quản lý Lô – Hạn sử dụng, liên thông Dược Quốc gia, đến tối ưu bán thuốc theo đơn.</p>
             </div>
         </section>
 
         <!-- Slide Lợi ích -->
         <section class="slide bg-white">
-            <img class="absolute top-10 right-10 h-10 w-auto" src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg">
+            <img class="absolute top-10 right-10 h-12 w-auto" src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg">
             <div class="slide-content-wrapper">
-                <h2 class="text-5xl font-bold text-blue-900 mb-12">Lợi ích nổi bật của giải pháp</h2>
-                <div class="w-full max-w-7xl grid grid-cols-3 gap-8">
-                    <div class="bg-gray-50 p-8 rounded-xl border border-gray-200 flex flex-col items-center h-full">
-                        <i class="fa-solid fa-shield-halved text-6xl text-blue-600 mb-6"></i>
+                <h2 class="text-6xl font-bold text-blue-900 mb-16">Lợi ích nổi bật của giải pháp</h2>
+                <div class="w-full max-w-[1100px] grid grid-cols-3 gap-10">
+                    <div class="bg-gray-50 p-8 rounded-2xl border border-gray-200 flex flex-col items-center h-full shadow-sm">
+                        <i class="fa-solid fa-shield-halved text-7xl text-blue-600 mb-6"></i>
                         <h4 class="text-3xl font-bold text-gray-800 mb-4">Tuân thủ quy định</h4>
                         <p class="text-xl text-gray-600">Kết nối trực tiếp với CSDL Dược Quốc gia.</p>
                     </div>
-                    <div class="bg-gray-50 p-8 rounded-xl border border-gray-200 flex flex-col items-center h-full">
-                        <i class="fa-solid fa-boxes-stacked text-6xl text-blue-600 mb-6"></i>
+                    <div class="bg-gray-50 p-8 rounded-2xl border border-gray-200 flex flex-col items-center h-full shadow-sm">
+                        <i class="fa-solid fa-boxes-stacked text-7xl text-blue-600 mb-6"></i>
                         <h4 class="text-3xl font-bold text-gray-800 mb-4">Quản lý Lô – HSD</h4>
                         <p class="text-xl text-gray-600">Gợi ý xuất bán theo FEFO, giảm thất thoát.</p>
                     </div>
-                    <div class="bg-gray-50 p-8 rounded-xl border border-gray-200 flex flex-col items-center h-full">
-                        <i class="fa-solid fa-clock-rotate-left text-6xl text-blue-600 mb-6"></i>
+                    <div class="bg-gray-50 p-8 rounded-2xl border border-gray-200 flex flex-col items-center h-full shadow-sm">
+                        <i class="fa-solid fa-clock-rotate-left text-7xl text-blue-600 mb-6"></i>
                         <h4 class="text-3xl font-bold text-gray-800 mb-4">Tiết kiệm thời gian</h4>
                         <p class="text-xl text-gray-600">Đồng bộ đơn thuốc mẫu, bán hàng nhanh.</p>
                     </div>
@@ -125,10 +142,10 @@
 
         <!-- Slide Tiêu đề Chương 1 -->
         <section class="slide bg-gray-50">
-            <img class="absolute top-10 right-10 h-10 w-auto" src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg">
-            <div class="slide-content-wrapper w-full max-w-6xl mx-auto items-start">
-                <p class="text-[10rem] font-bold text-blue-200 mb-4 leading-none">01</p>
-                <div class="text-left pl-12 border-l-8 border-blue-600">
+            <img class="absolute top-10 right-10 h-12 w-auto" src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg">
+            <div class="slide-content-wrapper w-full max-w-6xl mx-auto flex-row items-center justify-center gap-10">
+                <p class="text-[12rem] font-bold text-blue-200 leading-none">01</p>
+                <div class="text-left pl-12 border-l-8 border-blue-600 py-4">
                     <h2 class="text-7xl font-bold text-blue-900 leading-tight">Các thao tác cơ bản</h2>
                     <p class="mt-6 text-3xl text-gray-600">Thiết lập và nghiệp vụ hàng ngày.</p>
                 </div>
@@ -137,76 +154,76 @@
 
         <!-- Slide Tóm tắt Thao tác 1 -->
         <section class="slide bg-white">
-            <img class="absolute top-10 right-10 h-10 w-auto" src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg">
+            <img class="absolute top-10 right-10 h-12 w-auto" src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg">
             <div class="slide-content-wrapper w-full max-w-6xl">
                 <h2 class="text-5xl font-bold text-blue-900 mb-12">Danh sách thao tác cơ bản</h2>
                 <div class="w-full text-left space-y-6">
-                    <div class="flex items-center bg-gray-50 p-5 rounded-xl border-l-4 border-blue-500"><span class="text-2xl font-bold text-white bg-blue-600 w-12 h-12 flex items-center justify-center rounded-full mr-6">1</span><p class="text-2xl text-gray-800">Thiết lập kết nối CSDL Dược Quốc gia</p></div>
-                    <div class="flex items-center bg-gray-50 p-5 rounded-xl border-l-4 border-blue-500"><span class="text-2xl font-bold text-white bg-blue-600 w-12 h-12 flex items-center justify-center rounded-full mr-6">2</span><p class="text-2xl text-gray-800">Quản lý Danh mục hàng hóa (Thuốc)</p></div>
-                    <div class="flex items-center bg-gray-50 p-5 rounded-xl border-l-4 border-blue-500"><span class="text-2xl font-bold text-white bg-blue-600 w-12 h-12 flex items-center justify-center rounded-full mr-6">3</span><p class="text-2xl text-gray-800">Nhập hàng theo Lô - Hạn sử dụng</p></div>
-                    <div class="flex items-center bg-gray-50 p-5 rounded-xl border-l-4 border-blue-500"><span class="text-2xl font-bold text-white bg-blue-600 w-12 h-12 flex items-center justify-center rounded-full mr-6">4</span><p class="text-2xl text-gray-800">Bán hàng theo Lô - Hạn sử dụng</p></div>
+                    <div class="flex items-center bg-gray-50 p-5 rounded-xl border-l-8 border-blue-500 shadow-sm"><span class="text-2xl font-bold text-white bg-blue-600 w-12 h-12 flex items-center justify-center rounded-full mr-6 flex-shrink-0">1</span><p class="text-2xl text-gray-800">Thiết lập kết nối CSDL Dược Quốc gia</p></div>
+                    <div class="flex items-center bg-gray-50 p-5 rounded-xl border-l-8 border-blue-500 shadow-sm"><span class="text-2xl font-bold text-white bg-blue-600 w-12 h-12 flex items-center justify-center rounded-full mr-6 flex-shrink-0">2</span><p class="text-2xl text-gray-800">Quản lý Danh mục hàng hóa (Thuốc)</p></div>
+                    <div class="flex items-center bg-gray-50 p-5 rounded-xl border-l-8 border-blue-500 shadow-sm"><span class="text-2xl font-bold text-white bg-blue-600 w-12 h-12 flex items-center justify-center rounded-full mr-6 flex-shrink-0">3</span><p class="text-2xl text-gray-800">Nhập hàng theo Lô - Hạn sử dụng</p></div>
+                    <div class="flex items-center bg-gray-50 p-5 rounded-xl border-l-8 border-blue-500 shadow-sm"><span class="text-2xl font-bold text-white bg-blue-600 w-12 h-12 flex items-center justify-center rounded-full mr-6 flex-shrink-0">4</span><p class="text-2xl text-gray-800">Bán hàng theo Lô - Hạn sử dụng</p></div>
                 </div>
             </div>
         </section>
 
         <!-- Slide Ảnh: Thiết lập kết nối -->
         <section class="slide bg-gray-100">
-            <div class="slide-content-wrapper">
+            <div class="slide-content-wrapper p-8">
                 <div class="w-full text-center mb-6 flex-shrink-0">
                     <h2 class="text-4xl font-bold text-blue-900">1. Thiết lập kết nối</h2>
                     <p class="text-2xl text-gray-600 mt-2">Thiết lập → Quản lý chi nhánh → Điền tài khoản kết nối.</p>
                 </div>
-                <div class="flex-grow w-full flex items-center justify-center overflow-hidden border-4 border-white rounded-2xl shadow-lg bg-white p-2">
-                    <img src="https://cdn-kvweb.kiotviet.vn/kiotviet-website/wp-content/uploads/2025/10/15030937/NTR_141025-1-1.png" class="max-w-full max-h-full object-contain" alt="Thiết lập kết nối">
+                <div class="flex-grow w-full flex items-center justify-center overflow-hidden border-4 border-white rounded-2xl shadow-lg bg-white p-2 h-[500px]">
+                    <img src="https://cdn-kvweb.kiotviet.vn/kiotviet-website/wp-content/uploads/2025/10/15030937/NTR_141025-1-1.png" class="h-full w-auto object-contain" alt="Thiết lập kết nối">
                 </div>
             </div>
         </section>
 
         <!-- Slide Ảnh: Thêm thuốc -->
         <section class="slide bg-gray-100">
-            <div class="slide-content-wrapper">
+            <div class="slide-content-wrapper p-8">
                 <div class="w-full text-center mb-6 flex-shrink-0">
                     <h2 class="text-4xl font-bold text-blue-900">2. Thêm mới Thuốc</h2>
                     <p class="text-2xl text-gray-600 mt-2">Hàng hóa → Danh sách hàng hóa → Tạo mới → Thuốc.</p>
                 </div>
-                <div class="flex-grow w-full flex items-center justify-center overflow-hidden border-4 border-white rounded-2xl shadow-lg bg-white p-2">
-                    <img src="https://cdn-kvweb.kiotviet.vn/kiotviet-website/wp-content/uploads/2025/10/15030949/NTR_141025-2-1.png" class="max-w-full max-h-full object-contain" alt="Thêm mới Thuốc">
+                <div class="flex-grow w-full flex items-center justify-center overflow-hidden border-4 border-white rounded-2xl shadow-lg bg-white p-2 h-[500px]">
+                    <img src="https://cdn-kvweb.kiotviet.vn/kiotviet-website/wp-content/uploads/2025/10/15030949/NTR_141025-2-1.png" class="h-full w-auto object-contain" alt="Thêm mới Thuốc">
                 </div>
             </div>
         </section>
 
         <!-- Slide Ảnh: Nhập hàng -->
         <section class="slide bg-gray-100">
-            <div class="slide-content-wrapper">
+            <div class="slide-content-wrapper p-8">
                 <div class="w-full text-center mb-6 flex-shrink-0">
                     <h2 class="text-4xl font-bold text-blue-900">3. Nhập hàng theo Lô - HSD</h2>
                     <p class="text-2xl text-gray-600 mt-2">Chọn "Thêm mới lô, hạn sử dụng" khi tạo phiếu nhập.</p>
                 </div>
-                <div class="flex-grow w-full flex items-center justify-center overflow-hidden border-4 border-white rounded-2xl shadow-lg bg-white p-2">
-                    <img src="https://cdn-kvweb.kiotviet.vn/kiotviet-website/wp-content/uploads/2025/10/15031131/NTR_141025-8.png" class="max-w-full max-h-full object-contain" alt="Nhập hàng">
+                <div class="flex-grow w-full flex items-center justify-center overflow-hidden border-4 border-white rounded-2xl shadow-lg bg-white p-2 h-[500px]">
+                    <img src="https://cdn-kvweb.kiotviet.vn/kiotviet-website/wp-content/uploads/2025/10/15031131/NTR_141025-8.png" class="h-full w-auto object-contain" alt="Nhập hàng">
                 </div>
             </div>
         </section>
 
         <!-- Slide Ảnh: Bán hàng -->
         <section class="slide bg-gray-100">
-            <div class="slide-content-wrapper">
+            <div class="slide-content-wrapper p-8">
                 <div class="w-full text-center mb-6 flex-shrink-0">
                     <h2 class="text-4xl font-bold text-blue-900">4. Bán hàng theo Lô</h2>
                     <p class="text-2xl text-gray-600 mt-2">Hệ thống tự động gợi ý Lô hết hạn trước (FEFO).</p>
                 </div>
-                <div class="flex-grow w-full flex items-center justify-center overflow-hidden border-4 border-white rounded-2xl shadow-lg bg-white p-2">
-                    <img src="https://cdn-kvweb.kiotviet.vn/kiotviet-website/wp-content/uploads/2025/10/15031201/NTR_141025-10.png" class="max-w-full max-h-full object-contain" alt="Bán hàng">
+                <div class="flex-grow w-full flex items-center justify-center overflow-hidden border-4 border-white rounded-2xl shadow-lg bg-white p-2 h-[500px]">
+                    <img src="https://cdn-kvweb.kiotviet.vn/kiotviet-website/wp-content/uploads/2025/10/15031201/NTR_141025-10.png" class="h-full w-auto object-contain" alt="Bán hàng">
                 </div>
             </div>
         </section>
 
         <!-- Slide Tiêu đề Chương 2 -->
         <section class="slide bg-gray-50">
-            <img class="absolute top-10 right-10 h-10 w-auto" src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg">
-            <div class="slide-content-wrapper w-full max-w-6xl mx-auto items-start">
-                <p class="text-[10rem] font-bold text-blue-200 mb-4 leading-none">02</p>
-                <div class="text-left pl-12 border-l-8 border-blue-600">
+            <img class="absolute top-10 right-10 h-12 w-auto" src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg">
+            <div class="slide-content-wrapper w-full max-w-6xl mx-auto flex-row items-center justify-center gap-10">
+                <p class="text-[12rem] font-bold text-blue-200 leading-none">02</p>
+                <div class="text-left pl-12 border-l-8 border-blue-600 py-4">
                     <h2 class="text-7xl font-bold text-blue-900 leading-tight">Các tính năng nâng cao</h2>
                     <p class="mt-6 text-3xl text-gray-600">Đơn thuốc mẫu & Liên thông đơn thuốc.</p>
                 </div>
@@ -215,34 +232,34 @@
 
          <!-- Slide Ảnh: Đơn thuốc mẫu -->
          <section class="slide bg-gray-100">
-            <div class="slide-content-wrapper">
+            <div class="slide-content-wrapper p-8">
                 <div class="w-full text-center mb-6 flex-shrink-0">
                     <h2 class="text-4xl font-bold text-blue-900">Đơn thuốc mẫu</h2>
                     <p class="text-2xl text-gray-600 mt-2">Tạo các đơn thuốc combo để bán nhanh.</p>
                 </div>
-                <div class="flex-grow w-full flex items-center justify-center overflow-hidden border-4 border-white rounded-2xl shadow-lg bg-white p-2">
-                    <img src="https://cdn-kvweb.kiotviet.vn/kiotviet-website/wp-content/uploads/2025/10/15031225/NTR_141025-12.png" class="max-w-full max-h-full object-contain" alt="Đơn thuốc mẫu">
+                <div class="flex-grow w-full flex items-center justify-center overflow-hidden border-4 border-white rounded-2xl shadow-lg bg-white p-2 h-[500px]">
+                    <img src="https://cdn-kvweb.kiotviet.vn/kiotviet-website/wp-content/uploads/2025/10/15031225/NTR_141025-12.png" class="h-full w-auto object-contain" alt="Đơn thuốc mẫu">
                 </div>
             </div>
         </section>
 
         <!-- Slide Ảnh: Bán thuốc theo đơn -->
         <section class="slide bg-gray-100">
-            <div class="slide-content-wrapper">
+            <div class="slide-content-wrapper p-8">
                 <div class="w-full text-center mb-6 flex-shrink-0">
                     <h2 class="text-4xl font-bold text-blue-900">Bán thuốc theo Đơn Quốc gia</h2>
                     <p class="text-2xl text-gray-600 mt-2">Nhập Mã đơn thuốc để tự động đồng bộ thông tin.</p>
                 </div>
-                <div class="flex-grow w-full flex items-center justify-center overflow-hidden border-4 border-white rounded-2xl shadow-lg bg-white p-2">
-                    <img src="https://cdn-kvweb.kiotviet.vn/kiotviet-website/wp-content/uploads/2025/10/15031328/NTR_141025-17.png" class="max-w-full max-h-full object-contain" alt="Bán thuốc liên thông">
+                <div class="flex-grow w-full flex items-center justify-center overflow-hidden border-4 border-white rounded-2xl shadow-lg bg-white p-2 h-[500px]">
+                    <img src="https://cdn-kvweb.kiotviet.vn/kiotviet-website/wp-content/uploads/2025/10/15031328/NTR_141025-17.png" class="h-full w-auto object-contain" alt="Bán thuốc liên thông">
                 </div>
             </div>
         </section>
 
         <!-- Slide Kết thúc -->
         <section class="slide bg-gradient-to-br from-blue-700 to-blue-900">
-            <img class="absolute top-[100px] left-1/2 -translate-x-1/2 h-12 w-auto" src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal-White.svg">
-            <div class="w-[calc(100%-100px)] h-[calc(100%-100px)] border-4 border-white rounded-xl flex flex-col justify-center items-center p-8">
+            <img class="absolute top-[100px] left-1/2 -translate-x-1/2 h-16 w-auto" src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal-White.svg">
+            <div class="w-[calc(100%-150px)] h-[calc(100%-150px)] border-4 border-white rounded-xl flex flex-col justify-center items-center p-8">
                 <h1 class="text-7xl font-bold text-white">Cảm ơn bạn!</h1>
                 <p class="mt-6 text-3xl text-blue-200">Chúc bạn kinh doanh hiệu quả.</p>
             </div>
