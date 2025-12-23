@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Warrior: Phá Băng Khách Hàng</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #1e293b; color: white; font-family: 'Courier New', Courier, monospace; user-select: none; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        @keyframes pulse-glow { 0%, 100% { filter: drop-shadow(0 0 5px #f59e0b); } 50% { filter: drop-shadow(0 0 20px #f59e0b); } }
+        .cursor-crosshair { cursor: crosshair; }
+        .pixel-font { font-family: 'Courier New', monospace; letter-spacing: -1px; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        const App = () => {
+            // --- CẤU HÌNH NỘI DUNG ---
+            const questions = [
+                {
+                    q: "15 giây đầu tiên khi tiếp cận khách hàng 'lạnh' có ý nghĩa 'sống còn' như thế nào?",
+                    a: [
+                        { text: "Quyết định việc bạn có cơ hội 'mở miệng' tiếp hay bị mời ra cửa.", isCorrect: true, power: 15, rationale: "Chính xác! Ấn tượng ban đầu định đoạt tất cả. Không có thiện cảm = Không có hội thoại." },
+                        { text: "Thời gian để bạn kịp chỉnh lại tóc tai cho đẹp.", isCorrect: false, damage: 20, rationale: "Sai! Khách hàng đánh giá bạn ngay lập tức, không đợi bạn chải tóc đâu." },
+                        { text: "Không quan trọng lắm, 'mưa dầm thấm lâu' mà.", isCorrect: false, damage: 25, rationale: "Nguy hiểm! Với Direct Sales, không có ấn tượng đầu là mất luôn cơ hội." },
+                        { text: "Là lúc để khách hàng khen bạn đẹp trai/xinh gái.", isCorrect: false, damage: 20, rationale: "Mơ mộng quá! Họ đang bận tâm xem bạn có làm phiền họ không đấy." }
+                    ]
+                },
+                {
+                    q: "Trước khi 'đột nhập' cửa hàng, điệp viên Sale cần chuẩn bị thông tin gì để 'Biết người biết ta'?",
+                    a: [
+                        { text: "Tên, ngành hàng, tình hình kinh doanh (Soi Facebook, livestream...)", isCorrect: true, power: 20, rationale: "Chuẩn! Càng hiểu rõ khách, bạn càng dễ tìm ra 'nỗi đau' để tư vấn." },
+                        { text: "Chỉ cần biết địa chỉ chính xác để book Grab không bị lạc.", isCorrect: false, damage: 15, rationale: "Chưa đủ! Đến nơi mà không biết nói gì thì cũng về tay trắng." },
+                        { text: "Tìm hiểu xem chủ quán có con trai/con gái chưa để... tán.", isCorrect: false, damage: 30, rationale: "Tập trung chuyên môn đi! Chúng ta đi bán giải pháp, không phải đi xem mắt." },
+                        { text: "Không cần chuẩn bị, cứ 'tùy cơ ứng biến' mới là cao thủ.", isCorrect: false, damage: 25, rationale: "Sai lầm chết người! Không chuẩn bị là chuẩn bị cho thất bại." }
+                    ]
+                },
+                {
+                    q: "Chiêu 'Phá Băng' nào giúp biến người lạ thành 'người nhà' trong một nốt nhạc?",
+                    a: [
+                        { text: "Xông pha phụ giúp (cột bịch, xếp hàng) tạo giá trị tức thì.", isCorrect: true, power: 25, rationale: "Tuyệt vời! Hành động này phá vỡ rào cản phòng vệ, biến bạn từ 'người bán' thành 'người giúp đỡ'." },
+                        { text: "Khen khách hàng tới tấp: 'Chị ơi, nhà chị giàu thế!'", isCorrect: false, damage: 20, rationale: "Thảo mai quá! Khen không khéo là phản tác dụng ngay." },
+                        { text: "Nhảy vào hỏi luôn: 'Chị có muốn mua phần mềm KiotViet không?'", isCorrect: false, damage: 25, rationale: "Quá vội vàng! Chưa làm ấm mối quan hệ mà bán hàng là thất bại." },
+                        { text: "Giả vờ ngất xỉu trước cửa hàng để được quan tâm.", isCorrect: false, damage: 40, rationale: "Đừng diễn sâu thế! Coi chừng bị gọi xe cấp cứu đấy." }
+                    ]
+                },
+                {
+                    q: "Tại sao BẮT BUỘC phải 'Xác thực 2 lớp' (SĐT & Nguồn) trước khi tư vấn?",
+                    a: [
+                        { text: "Để bảo vệ 'nồi cơm' của mình, tránh tranh chấp và tuân thủ COC.", isCorrect: true, power: 20, rationale: "Chính xác! Làm đúng quy trình để tránh công sức 'đổ sông đổ bể' sau này." },
+                        { text: "Cho vui thôi, thủ tục hành chính ấy mà.", isCorrect: false, damage: 20, rationale: "Sai! Đây là bước sống còn để bảo vệ quyền lợi của Sales." },
+                        { text: "Để xem khách có dùng số điện thoại đẹp (Sim Tứ Quý) không.", isCorrect: false, damage: 15, rationale: "Không liên quan! Tập trung vào lịch sử chăm sóc khách hàng trên hệ thống." },
+                        { text: "Để xin số về tối nhắn tin chúc ngủ ngon.", isCorrect: false, damage: 30, rationale: "Nghiêm túc nào! Đây là công việc kinh doanh." }
+                    ]
+                },
+                {
+                    q: "Tra cứu SĐT thấy khách đang ở trạng thái 'Contact bán hàng' của Sale khác. Bạn làm gì?",
+                    a: [
+                        { text: "Dừng ngay lập tức! 'Hoa đã có chủ', tuyệt đối không tư vấn tiếp.", isCorrect: true, power: 25, rationale: "Chuẩn COC! Tôn trọng đồng nghiệp và quy định công ty là đạo đức nghề nghiệp." },
+                        { text: "Kệ, khách chưa chốt thì mình cứ 'đập chậu cướp hoa'.", isCorrect: false, damage: 50, rationale: "Vi phạm nghiêm trọng! Bạn sẽ bị phạt nặng vì vi phạm COC." },
+                        { text: "Gọi điện rủ Sale kia đi uống bia thương lượng chia hoa hồng.", isCorrect: false, damage: 30, rationale: "Không được! Quy định là quy định, không có thỏa thuận ngầm." },
+                        { text: "Âm thầm tư vấn rồi bảo khách dùng số điện thoại vợ/chồng đăng ký.", isCorrect: false, damage: 40, rationale: "Gian lận! Đây là hành vi bị cấm tuyệt đối." }
+                    ]
+                },
+                {
+                    q: "Muốn khách hàng 'dốc hết ruột gan' tâm sự về nỗi đau quản lý, hãy ưu tiên dùng...",
+                    a: [
+                        { text: "Câu hỏi Mở (Như thế nào, Bằng cách nào...) & Câu hỏi Lựa chọn.", isCorrect: true, power: 20, rationale: "Chính xác! Hãy để khách hàng nói, bạn lắng nghe để tìm ra vấn đề thực sự." },
+                        { text: "Câu hỏi Đóng (Có/Không) cho nhanh gọn lẹ.", isCorrect: false, damage: 15, rationale: "Sai! Hỏi Có/Không sẽ làm cuộc hội thoại đi vào ngõ cụt." },
+                        { text: "Câu hỏi Tu từ (Trời hôm nay đẹp nhỉ?).", isCorrect: false, damage: 10, rationale: "Vô thưởng vô phạt! Không giúp ích gì cho việc khai thác nhu cầu." },
+                        { text: "Tự trả lời hộ khách luôn cho đỡ mất thời gian.", isCorrect: false, damage: 20, rationale: "Thế thì gọi là độc thoại, không phải tư vấn!" }
+                    ]
+                },
+                {
+                    q: "Công thức 'thần thánh' (Feature - Benefit) để tư vấn giải pháp đi thẳng vào tim khách là gì?",
+                    a: [
+                        { text: "Tính năng A -> Giúp giải quyết Khó khăn B (Lợi ích sát sườn).", isCorrect: true, power: 30, rationale: "Đỉnh cao! Đừng bán tính năng, hãy bán giải pháp cho vấn đề của họ." },
+                        { text: "Liệt kê một lèo 1001 tính năng cho khách choáng ngợp chơi.", isCorrect: false, damage: 20, rationale: "Sai lầm! Khách sẽ bị 'bội thực' thông tin và không nhớ gì cả." },
+                        { text: "Nói thao thao bất tuyệt về lịch sử hào hùng của công ty.", isCorrect: false, damage: 15, rationale: "Khách không quan tâm đâu. Họ chỉ quan tâm 'Tôi được gì?' thôi." },
+                        { text: "Chỉ tập trung nói về giá tiền rẻ bèo.", isCorrect: false, damage: 20, rationale: "Giá rẻ không phải là tất cả. Giá trị giải pháp mới là cốt lõi." }
+                    ]
+                },
+                {
+                    q: "Khi gặp khách hàng 'Low-tech' (ngại công nghệ), từ nào nên TRÁNH dùng để họ không hoảng?",
+                    a: [
+                        { text: "'Demo' (Nghe kỹ thuật quá, hãy dùng 'Dùng thử/Làm thử').", isCorrect: true, power: 15, rationale: "Tinh tế! Ngôn ngữ gần gũi sẽ xóa bỏ rào cản tâm lý e ngại của khách hàng lớn tuổi." },
+                        { text: "'Dễ lắm'.", isCorrect: false, damage: 10, rationale: "Từ này dùng được, để trấn an khách hàng." },
+                        { text: "'Cầm tay chỉ việc'.", isCorrect: false, damage: 10, rationale: "Từ này rất tốt, tạo cảm giác được hỗ trợ tận tình." },
+                        { text: "'Miễn phí'.", isCorrect: false, damage: 10, rationale: "Ai cũng thích miễn phí cả, không cần tránh." }
+                    ]
+                },
+                {
+                    q: "Gói 'Chuyên Nghiệp' (310k/tháng) được thiết kế 'đo ni đóng giày' cho đối tượng nào?",
+                    a: [
+                        { text: "Cửa hàng có nhân viên, bán đa kênh (Online & Offline).", isCorrect: true, power: 20, rationale: "Chuẩn bài! Đây là phân khúc khách hàng phổ biến nhất cần tính năng quản lý nhân viên và online." },
+                        { text: "Cửa hàng tạp hóa nhỏ xíu ở quê, bán cho vui.", isCorrect: false, damage: 15, rationale: "Hơi thừa. Gói Hỗ Trợ (250k) sẽ phù hợp và tiết kiệm hơn cho họ." },
+                        { text: "Tập đoàn đa quốc gia ngàn tỷ.", isCorrect: false, damage: 20, rationale: "KiotViet mạnh, nhưng tập đoàn lớn cần giải pháp ERP chuyên sâu hơn (Gói Cao Cấp)." },
+                        { text: "Sinh viên khởi nghiệp bán trà đá vỉa hè.", isCorrect: false, damage: 15, rationale: "Quy mô này chưa cần thiết dùng gói Chuyên Nghiệp đâu." }
+                    ]
+                },
+                {
+                    q: "Khi chốt deal, tung 'Ưu đãi' (Voucher, tặng tháng...) thế nào để khách rút ví ngay?",
+                    a: [
+                        { text: "Kèm điều kiện thời gian/hành động (Mua trước ngày X để nhận quà Y).", isCorrect: true, power: 35, rationale: "Đòn chốt hạ! Tạo sự khẩn cấp (FOMO) khiến khách hàng phải ra quyết định ngay kẻo lỡ." },
+                        { text: "Cho khách thoải mái: 'Khi nào chị thích thì lấy ưu đãi cũng được'.", isCorrect: false, damage: 25, rationale: "Sai! Thế thì khách sẽ trì hoãn mãi mãi." },
+                        { text: "Giấu ưu đãi đi để dành làm của riêng.", isCorrect: false, damage: 30, rationale: "Không được! Ưu đãi là công cụ của công ty để hỗ trợ chốt sale." },
+                        { text: "Bắt khách phải ký hợp đồng 10 năm mới được giảm giá.", isCorrect: false, damage: 20, rationale: "Điều kiện quá khó! Khách sẽ chạy mất dép." }
+                    ]
+                }
+            ];
+
+            const HERO_NAME = "HERO";
+            const BOSS_NAME = "KHÁCH HÀNG BĂNG GIÁ"; 
+
+            // --- GAME ENGINE ---
+            const [gameState, setGameState] = useState('start'); 
+            const [qIdx, setQIdx] = useState(0);
+            const [bossHp, setBossHp] = useState(100);
+            const [heroHp, setHeroHp] = useState(100);
+            const [combo, setCombo] = useState(0);
+            const [ultCharge, setUltCharge] = useState(0);
+            const [shake, setShake] = useState(0);
+            const [flash, setFlash] = useState(false);
+            const [particles, setParticles] = useState([]);
+            const [floatText, setFloatText] = useState([]);
+            const [feedback, setFeedback] = useState(null);
+            const [bgOffset, setBgOffset] = useState(0);
+            const audioCtx = useRef(null);
+
+            const initAudio = () => {
+                if (!audioCtx.current) audioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.current.state === 'suspended') audioCtx.current.resume();
+            };
+
+            const playSound = (type) => {
+                if (!audioCtx.current) return;
+                const ctx = audioCtx.current;
+                const t = ctx.currentTime;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                if (type === 'hit') {
+                    // Laser shoot sound
+                    osc.type = 'sawtooth'; 
+                    osc.frequency.setValueAtTime(600, t); 
+                    osc.frequency.exponentialRampToValueAtTime(100, t + 0.2);
+                    gain.gain.setValueAtTime(0.2, t); 
+                    gain.gain.exponentialRampToValueAtTime(0.01, t + 0.2);
+                    osc.start(t); osc.stop(t + 0.2);
+                } else if (type === 'error') {
+                    // Buzzer
+                    osc.type = 'sawtooth'; 
+                    osc.frequency.setValueAtTime(100, t); 
+                    osc.frequency.linearRampToValueAtTime(80, t + 0.3);
+                    gain.gain.setValueAtTime(0.3, t); 
+                    gain.gain.linearRampToValueAtTime(0.01, t + 0.3);
+                    osc.start(t); osc.stop(t + 0.3);
+                } else if (type === 'win') {
+                    // Victory fanfare
+                    const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98];
+                    notes.forEach((f, i) => {
+                        const o = ctx.createOscillator(); const g = ctx.createGain();
+                        o.type = 'square'; o.connect(g); g.connect(ctx.destination);
+                        o.frequency.value = f; g.gain.setValueAtTime(0.1, t + i*0.1); g.gain.exponentialRampToValueAtTime(0.001, t + i*0.1 + 0.3);
+                        o.start(t + i*0.1); o.stop(t + i*0.1 + 0.3);
+                    });
+                } else if (type === 'coin') {
+                    // Coin sound
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(1200, t); 
+                    osc.frequency.exponentialRampToValueAtTime(1800, t + 0.1); 
+                    gain.gain.setValueAtTime(0.1, t);
+                    gain.gain.exponentialRampToValueAtTime(0.01, t + 0.5);
+                    osc.start(t); osc.stop(t + 0.5);
+                } else if (type === 'ult') {
+                    // Power up / Ultimate sound
+                     osc.type = 'square'; 
+                     osc.frequency.setValueAtTime(220, t); 
+                     osc.frequency.linearRampToValueAtTime(880, t + 0.5);
+                     osc.frequency.setValueAtTime(880, t + 0.5);
+                     osc.frequency.exponentialRampToValueAtTime(110, t + 1.0);
+                     gain.gain.setValueAtTime(0.3, t); gain.gain.linearRampToValueAtTime(0, t + 1.0);
+                     osc.start(t); osc.stop(t + 1.0);
+                }
+            };
+
+            const spawnParticles = (x, y, color) => {
+                const newParts = Array.from({ length: 20 }).map((_, i) => ({ id: Math.random(), x, y, vx: (Math.random() - 0.5) * 15, vy: (Math.random() - 0.5) * 15, life: 1, color: color || '#f59e0b' }));
+                setParticles(prev => [...prev, ...newParts]);
+            };
+            const spawnText = (text, type) => { setFloatText(prev => [...prev, { id: Math.random(), text, type, life: 1 }]); };
+
+            useEffect(() => {
+                let animFrame;
+                const loop = () => {
+                    setBgOffset(prev => (prev + 0.2) % 100);
+                    setParticles(prev => prev.map(p => ({ ...p, x: p.x + p.vx, y: p.y + p.vy, life: p.life - 0.05 })).filter(p => p.life > 0));
+                    setFloatText(prev => prev.map(t => ({ ...t, life: t.life - 0.02 })).filter(t => t.life > 0));
+                    if (shake > 0) setShake(s => Math.max(0, s - 1));
+                    animFrame = requestAnimationFrame(loop);
+                };
+                animFrame = requestAnimationFrame(loop);
+                return () => cancelAnimationFrame(animFrame);
+            }, [shake]);
+
+            const handleAnswer = (opt, event) => {
+                if (feedback) return;
+                initAudio();
+                if (opt.isCorrect) {
+                    playSound('hit');
+                    let dmg = opt.power; if (combo > 2) dmg *= 1.5;
+                    setBossHp(prev => Math.max(0, prev - dmg));
+                    setCombo(c => c + 1); setUltCharge(u => Math.min(100, u + 20)); setShake(5);
+                    const rect = event.target.getBoundingClientRect();
+                    spawnParticles(rect.left + rect.width/2, rect.top, '#3b82f6'); // Blue particles for Ice break
+                    spawnText(`-${Math.floor(dmg)} HP`, 'dmg');
+                    setFeedback({ type: 'success', msg: opt.rationale });
+                    if (bossHp - dmg <= 0) setTimeout(() => { playSound('win'); setGameState('won'); }, 1000);
+                } else {
+                    playSound('error');
+                    setHeroHp(prev => Math.max(0, prev - (opt.damage || 20)));
+                    setCombo(0); setUltCharge(0); setShake(20); setFlash(true); setTimeout(() => setFlash(false), 100);
+                    const rect = event.target.getBoundingClientRect();
+                    spawnParticles(rect.left + rect.width/2, rect.top, '#ef4444');
+                    spawnText("MISS!", 'error');
+                    setFeedback({ type: 'error', msg: opt.rationale });
+                    if (heroHp - (opt.damage || 20) <= 0) setTimeout(() => setGameState('lost'), 1000);
+                }
+            };
+            
+            const useUltimate = () => {
+                if (ultCharge < 100) return;
+                initAudio(); playSound('ult'); setShake(50); setFlash(true); setTimeout(() => setFlash(false), 500);
+                const dmg = 40; setBossHp(prev => Math.max(0, prev - dmg)); setUltCharge(0);
+                spawnText("CHỐT ĐƠN THẦN TỐC!!!", 'ult');
+                spawnParticles(window.innerWidth/2, window.innerHeight/2, '#f59e0b');
+                if (bossHp - dmg <= 0) setTimeout(() => { playSound('win'); setGameState('won'); }, 1500);
+            };
+
+            const nextQ = () => {
+                if (qIdx < questions.length - 1 && bossHp > 0 && heroHp > 0) { setQIdx(prev => prev + 1); setFeedback(null); }
+                else if (bossHp > 0 && heroHp > 0) { setGameState('won'); }
+                else if (heroHp <= 0) { setGameState('lost'); }
+            };
+
+            // --- Characters ---
+            const HeroSVG = () => (
+                <svg viewBox="0 0 200 200" className={`w-32 h-32 md:w-48 md:h-48 drop-shadow-[0_0_15px_rgba(245,158,11,0.8)] ${heroHp < 30 ? 'animate-pulse' : 'animate-[bounce_2s_infinite]'}`}>
+                    <circle cx="100" cy="100" r="80" fill="#f59e0b" fillOpacity="0.1" className="animate-[ping_3s_infinite]" />
+                    {/* Sales Warrior with Sword (Pen/Stylus) */}
+                    <path d="M100 150 L140 180 L60 180 Z" fill="#334155" />
+                    <rect x="80" y="80" width="40" height="70" fill="#f59e0b" rx="5"/>
+                    <circle cx="100" cy="60" r="30" fill="#fcd34d" stroke="#000" strokeWidth="2" />
+                    <rect x="75" y="55" width="50" height="8" rx="2" fill="#000" />
+                    <path d="M120 100 L160 80 L160 90 Z" fill="#94a3b8" /> {/* Sword hand */}
+                    <rect x="155" y="40" width="10" height="60" fill="#cbd5e1" transform="rotate(45 160 90)"/> {/* The Pen Sword */}
+                    <text x="100" y="25" fontSize="16" fill="white" textAnchor="middle" fontWeight="bold" className="pixel-font">SALES HERO</text>
+                </svg>
+            );
+
+            const BossSVG = () => (
+                <svg viewBox="0 0 200 200" className={`w-40 h-40 md:w-64 md:h-64 drop-shadow-[0_0_20px_rgba(59,130,246,0.8)] transition-all duration-300 ${shake > 0 ? 'scale-90 skew-x-12' : 'animate-[float_5s_ease-in-out_infinite]'}`}>
+                    <defs>
+                        <linearGradient id="iceBossGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stopColor="#e0f2fe" />
+                            <stop offset="100%" stopColor="#0ea5e9" />
+                        </linearGradient>
+                    </defs>
+                    {/* Ice Shield/Block Monster */}
+                    <path d="M100 20 L170 60 V140 L100 180 L30 140 V60 Z" fill="url(#iceBossGrad)" stroke="#fff" strokeWidth="3" />
+                    <path d="M30 60 L100 100 L170 60" fill="none" stroke="#fff" strokeWidth="2" opacity="0.5" />
+                    <path d="M100 100 V180" fill="none" stroke="#fff" strokeWidth="2" opacity="0.5" />
+                    
+                    {/* Cold Eyes */}
+                    <rect x="70" y="80" width="20" height="10" fill="#1e3a8a" />
+                    <rect x="110" y="80" width="20" height="10" fill="#1e3a8a" />
+                    
+                    {/* Locked Mouth */}
+                    <rect x="85" y="120" width="30" height="5" fill="#1e3a8a" />
+                    <path d="M85 115 L115 125 M85 125 L115 115" stroke="#1e3a8a" strokeWidth="2" />
+
+                    <text x="100" y="195" fontSize="12" fill="#bae6fd" textAnchor="middle" className="pixel-font font-bold">KHÁCH HÀNG LẠNH</text>
+                </svg>
+            );
+
+            if (gameState === 'start') return (
+                <div className="min-h-screen bg-slate-900 text-blue-400 font-mono flex flex-col items-center justify-center relative overflow-hidden">
+                    {/* Icy Background */}
+                    <div className="absolute inset-0 opacity-20" style={{backgroundImage: 'radial-gradient(circle at 50% 50%, #0ea5e9 0%, transparent 50%), linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, .1) 25%, rgba(255, 255, 255, .1) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, .1) 75%, rgba(255, 255, 255, .1) 76%, transparent 77%, transparent)', backgroundSize: '60px 60px'}}></div>
+                    
+                    <div className="z-10 text-center space-y-8 p-8 border-4 border-blue-500 shadow-[0_0_50px_#3b82f6] bg-slate-900/90 backdrop-blur-md rounded-xl max-w-2xl w-full mx-4">
+                        <h1 className="text-3xl md:text-5xl font-black italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300 animate-pulse pixel-font">SALES WARRIOR</h1>
+                        <h2 className="text-xl md:text-2xl text-yellow-400 font-bold uppercase tracking-widest">Phá Băng Khách Hàng</h2>
+                        <p className="text-gray-300 md:text-lg italic">"Nắm vững 6 bước - Chinh phục mọi thượng đế"</p>
+                        <div className="flex justify-center items-center gap-4 md:gap-8">
+                            <HeroSVG />
+                            <div className="text-4xl font-black self-center text-white animate-pulse">VS</div>
+                            <BossSVG />
+                        </div>
+                        <button 
+                            onClick={() => { initAudio(); playSound('coin'); setTimeout(() => setGameState('play'), 800); }}
+                            className="w-full md:w-auto px-8 py-3 md:px-12 md:py-4 bg-yellow-500 hover:bg-yellow-400 text-black font-black text-xl md:text-2xl rounded shadow-[0_0_20px_#eab308] hover:scale-105 transition-transform animate-[pulse_1.5s_infinite]"
+                        >
+                            INSERT COIN TO START
+                        </button>
+                    </div>
+                </div>
+            );
+
+             if (gameState === 'won' || gameState === 'lost') return (
+                <div className={`min-h-screen flex flex-col items-center justify-center p-8 text-center font-mono ${gameState === 'won' ? 'bg-blue-900' : 'bg-red-900'}`}>
+                    <h1 className="text-5xl md:text-7xl font-black text-white mb-4 pixel-font drop-shadow-lg">{gameState === 'won' ? 'DEAL SUCCESS!' : 'DEAL FAILED'}</h1>
+                    <p className="text-xl text-white/90 mb-8 max-w-xl">
+                        {gameState === 'won' 
+                            ? "Chúc mừng Chiến Binh! Bạn đã phá tan lớp băng phòng thủ và chốt đơn thành công!" 
+                            : "Đừng nản chí! Bán hàng là cuộc chơi của những con số. Hãy xem lại quy trình và thử lại!"}
+                    </p>
+                    <div className="flex gap-4">
+                        <button onClick={() => window.location.reload()} className="px-8 py-3 bg-white text-black font-bold text-xl rounded shadow-lg hover:bg-gray-200 uppercase">Chơi lại</button>
+                    </div>
+                </div>
+            );
+
+            return (
+                <div className={`min-h-screen bg-slate-800 text-white font-mono overflow-hidden relative cursor-crosshair`} style={{ transform: `translate(${Math.random()*shake - shake/2}px, ${Math.random()*shake - shake/2}px)` }}>
+                    {flash && <div className="absolute inset-0 bg-white z-50 opacity-50 pointer-events-none"></div>}
+                    
+                    {/* Background Grid */}
+                    <div className="absolute inset-0 z-0 opacity-10" style={{ 
+                        backgroundImage: `linear-gradient(#475569 1px, transparent 1px), linear-gradient(90deg, #475569 1px, transparent 1px)`, 
+                        backgroundSize: '40px 40px',
+                        transform: `translateY(${bgOffset}px)`
+                    }}></div>
+
+                    {/* HUD */}
+                    <div className="relative z-20 p-4 flex justify-between items-start bg-black/40 backdrop-blur-sm border-b border-white/10">
+                        <div className="w-1/3">
+                            <div className="text-yellow-400 font-bold text-xs md:text-sm uppercase tracking-widest mb-1">{HERO_NAME}</div>
+                            <div className="w-full md:w-64 h-4 md:h-6 bg-gray-800 rounded-sm border-2 border-yellow-700 overflow-hidden relative shadow-[0_0_10px_#f59e0b]">
+                                <div className="h-full bg-gradient-to-r from-yellow-600 to-yellow-400 transition-all duration-300" style={{ width: `${heroHp}%` }}></div>
+                            </div>
+                            <div className="mt-2 flex items-center gap-2">
+                                <span className="text-[10px] md:text-xs text-blue-300 font-bold">NĂNG LƯỢNG</span>
+                                <div className="w-24 md:w-32 h-2 bg-gray-800 rounded-full border border-blue-900 overflow-hidden">
+                                    <div className="h-full bg-blue-400 transition-all duration-300" style={{ width: `${ultCharge}%` }}></div>
+                                </div>
+                                {ultCharge >= 100 && (<button onClick={useUltimate} className="bg-blue-500 text-white text-[10px] font-black px-2 py-1 rounded animate-bounce shadow-[0_0_10px_#3b82f6]">CHỐT ĐƠN!</button>)}
+                            </div>
+                        </div>
+                        
+                        <div className="text-center transform translate-y-2">
+                            <div className="text-xl md:text-3xl font-black italic text-white drop-shadow-[0_2px_0_#2563eb] pixel-font">BƯỚC {qIdx + 1}/10</div>
+                            {combo > 1 && <div className="text-yellow-400 font-black text-sm md:text-xl animate-bounce mt-1">{combo} COMBO!</div>}
+                        </div>
+                        
+                        <div className="w-1/3 flex flex-col items-end">
+                            <div className="text-cyan-300 font-bold text-xs md:text-sm uppercase tracking-widest mb-1">{BOSS_NAME}</div>
+                            <div className="w-full md:w-64 h-4 md:h-6 bg-gray-800 rounded-sm border-2 border-cyan-700 overflow-hidden relative shadow-[0_0_10px_#06b6d4]">
+                                <div className="h-full bg-gradient-to-r from-cyan-600 to-cyan-400 transition-all duration-300" style={{ width: `${bossHp}%` }}></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Battle Stage */}
+                    <div className="relative flex justify-between items-end px-4 md:px-32 h-[25vh] md:h-[35vh] z-10">
+                        <div className="relative top-4 md:top-8 transition-all duration-500"><HeroSVG /></div>
+                        <div className="relative top-4 md:top-8 transition-all duration-500"><BossSVG /></div>
+                    </div>
+
+                    {/* Control Panel / Dialogue Box */}
+                    <div className="absolute bottom-0 left-0 right-0 bg-slate-900 border-t-4 border-yellow-500 p-4 md:p-6 z-30 min-h-[40vh] shadow-[0_-5px_20px_rgba(0,0,0,0.5)]">
+                        {feedback ? (
+                            <div className="text-center h-full flex flex-col items-center justify-center animate-[fadeIn_0.3s]">
+                                <h2 className={`text-2xl md:text-4xl font-black mb-4 ${feedback.type === 'success' ? 'text-green-400' : 'text-red-500'} pixel-font`}>
+                                    {feedback.type === 'success' ? 'QUÁ CHUẨN!' : 'TRƯỢT RỒI!'}
+                                </h2>
+                                <div className="bg-slate-800 p-4 rounded-lg border border-slate-700 max-w-3xl mb-6">
+                                    <p className="text-base md:text-xl text-white italic leading-relaxed">"{feedback.msg}"</p>
+                                </div>
+                                <button onClick={nextQ} className="px-10 py-3 bg-white hover:bg-gray-200 text-black font-black text-xl rounded shadow-[0_4px_0_#94a3b8] active:shadow-none active:translate-y-1 transition-all">TIẾP TỤC >></button>
+                            </div>
+                        ) : (
+                            <div className="max-w-5xl mx-auto">
+                                <h3 className="text-lg md:text-2xl text-center font-bold text-yellow-400 mb-6 pb-4 border-b border-slate-700 leading-snug">{questions[qIdx].q}</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {questions[qIdx].a.map((opt, i) => (
+                                        <button key={i} onClick={(e) => handleAnswer(opt, e)} className="group relative bg-slate-800 border-2 border-slate-600 p-4 rounded-lg hover:bg-slate-700 hover:border-yellow-400 hover:shadow-[0_0_15px_rgba(250,204,21,0.3)] transition-all text-left active:scale-[0.98]">
+                                            <div className="absolute top-3 left-3 w-6 h-6 flex items-center justify-center bg-slate-700 rounded text-xs text-gray-400 group-hover:bg-yellow-500 group-hover:text-black font-bold border border-slate-500">{String.fromCharCode(65+i)}</div>
+                                            <span className="font-semibold text-sm md:text-lg text-slate-200 group-hover:text-white pl-8 block">{opt.text}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                     {/* VFX Layer */}
+                     {particles.map(p => (<div key={p.id} className="absolute w-2 h-2 md:w-3 md:h-3 rounded-sm pointer-events-none" style={{ left: p.x, top: p.y, backgroundColor: p.color, opacity: p.life, transform: `scale(${p.life}) rotate(${p.life * 360}deg)` }} />))}
+                     {floatText.map(t => (<div key={t.id} className={`absolute font-black text-2xl md:text-4xl pointer-events-none z-50 pixel-font ${t.type === 'dmg' ? 'text-blue-400 drop-shadow-[2px_2px_0_#1e3a8a]' : (t.type === 'ult' ? 'text-yellow-400 drop-shadow-[0_0_10px_#f59e0b]' : 'text-red-500 drop-shadow-[2px_2px_0_#7f1d1d]')}`} style={{ left: '50%', top: '40%', opacity: t.life, transform: `translate(-50%, ${-150 * (1-t.life)}px) scale(${1 + (1-t.life)})` }}>{t.text}</div>))}
+                </div>
+            );
+        };
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
