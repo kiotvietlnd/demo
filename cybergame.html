@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KiotViet Cyber Return Challenge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --kv-neon: #00ff73;
+            --kv-purple: #9d00ff;
+            --kv-dark: #0a0a0c;
+        }
+        body {
+            font-family: 'Lexend', sans-serif;
+            background-color: var(--kv-dark);
+            color: white;
+            overflow: hidden;
+            height: 100vh;
+        }
+        .cyber-font { font-family: 'Orbitron', sans-serif; }
+        
+        .neon-border {
+            border: 2px solid var(--kv-neon);
+            box-shadow: 0 0 15px var(--kv-neon), inset 0 0 5px var(--kv-neon);
+        }
+        
+        .bg-grid {
+            background-image: 
+                linear-gradient(rgba(0, 255, 115, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 115, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            animation: grid-move 20s linear infinite;
+        }
+
+        @keyframes grid-move {
+            from { background-position: 0 0; }
+            to { background-position: 0 600px; }
+        }
+
+        .option-hex {
+            clip-path: polygon(95% 0, 100% 25%, 100% 75%, 95% 100%, 5% 100%, 0 75%, 0 25%, 5% 0);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 115, 0.3);
+        }
+
+        .option-hex:hover:not(.disabled) {
+            background: rgba(0, 255, 115, 0.2);
+            transform: scale(1.02) translateX(10px);
+            border-color: var(--kv-neon);
+            box-shadow: -5px 0 15px var(--kv-neon);
+        }
+
+        .correct { background: rgba(34, 197, 94, 0.4) !important; border-color: #22c55e !important; box-shadow: 0 0 20px #22c55e !important; }
+        .incorrect { background: rgba(239, 68, 68, 0.4) !important; border-color: #ef4444 !important; box-shadow: 0 0 20px #ef4444 !important; }
+
+        .floating { animation: floating 3s ease-in-out infinite; }
+        @keyframes floating {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body class="bg-grid flex items-center justify-center">
+
+    <!-- Sound Controller (Hidden) -->
+    <div id="sound-engine"></div>
+
+    <div class="relative w-full max-w-4xl p-4">
+        <!-- Start Screen -->
+        <div id="start-screen" class="text-center">
+            <h1 class="cyber-font text-6xl font-black mb-4 tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500 floating">
+                RETURN CHALLENGE
+            </h1>
+            <p class="text-xl text-green-400 mb-12 opacity-80 uppercase tracking-widest">KiotViet Cyber Training v.2.0</p>
+            
+            <button onclick="initGame()" class="neon-border bg-transparent text-white px-12 py-5 rounded-sm cyber-font text-2xl font-bold hover:bg-green-500 hover:text-black transition-all duration-300">
+                INITIALIZE CORE
+            </button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="hidden relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                <!-- Left Info -->
+                <div class="md:col-span-4 space-y-4">
+                    <div class="neon-border p-4 bg-black/60 backdrop-blur-md">
+                        <p class="cyber-font text-xs text-green-500 mb-1">DATA STREAM</p>
+                        <h2 id="question-count" class="text-2xl font-bold italic">CA 01/10</h2>
+                    </div>
+                    <div class="neon-border p-4 bg-black/60 backdrop-blur-md">
+                        <p class="cyber-font text-xs text-purple-500 mb-1">SCORE STACK</p>
+                        <h2 id="score-text" class="text-2xl font-bold italic text-purple-400">0000</h2>
+                    </div>
+                </div>
+
+                <!-- Right Question -->
+                <div class="md:col-span-8">
+                    <div class="p-6 mb-8 border-l-4 border-green-500 bg-black/40">
+                        <h3 id="question-text" class="text-2xl font-bold leading-tight italic"></h3>
+                    </div>
+
+                    <div id="options-container" class="space-y-4">
+                        <!-- Options will be injected here -->
+                    </div>
+
+                    <!-- Feedback -->
+                    <div id="feedback-panel" class="hidden mt-8 p-6 bg-white/10 border border-white/20 backdrop-blur-xl animate-pulse">
+                        <p id="feedback-msg" class="text-sm font-light italic leading-relaxed"></p>
+                    </div>
+
+                    <button id="next-btn" onclick="handleNext()" class="hidden w-full mt-8 bg-green-500 text-black py-4 font-black cyber-font text-xl hover:bg-white transition-all">
+                        NEXT SEQUENCE >>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="result-screen" class="hidden text-center p-12 neon-border bg-black/80">
+            <h2 class="cyber-font text-4xl mb-4 text-green-400">MISSION COMPLETE</h2>
+            <div class="text-8xl font-black mb-8 text-white cyber-font" id="final-score">00/10</div>
+            <p id="result-comment" class="text-xl mb-12 italic opacity-80"></p>
+            <button onclick="location.reload()" class="bg-white text-black px-8 py-3 font-bold cyber-font">REBOOT SYSTEM</button>
+        </div>
+    </div>
+
+    <script>
+        // --- SOUND ENGINE ---
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+
+        function playSound(type) {
+            if (!audioCtx) audioCtx = new AudioCtx();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            const now = audioCtx.currentTime;
+
+            if (type === 'start') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(110, now);
+                osc.frequency.exponentialRampToValueAtTime(440, now + 0.5);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                osc.start(); osc.stop(now + 0.5);
+            } else if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(880, now);
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                osc.start(); osc.stop(now + 0.1);
+            } else if (type === 'correct') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(523.25, now); // C5
+                osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
+                osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
+                osc.frequency.setValueAtTime(1046.50, now + 0.3); // C6
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                osc.start(); osc.stop(now + 0.5);
+            } else if (type === 'incorrect') {
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(220, now);
+                osc.frequency.exponentialRampToValueAtTime(55, now + 0.4);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                osc.start(); osc.stop(now + 0.4);
+            }
+        }
+
+        // --- GAME LOGIC ---
+        const quizData = [
+            {
+                q: "Khách trả hàng nhưng lỡ làm mất hóa đơn giấy. Bạn xử lý thế nào cho 'ngầu'?",
+                a: [
+                    { t: "Bắt khách đi tìm, không tìm thấy thì nghỉ.", c: false, r: "Làm vậy là mất khách luôn đó!" },
+                    { t: "Dùng SĐT tìm lịch sử trên KiotViet.", c: true, r: "Quá chuẩn! Dữ liệu nằm trong tay, mất giấy vẫn xử lý 'ngon lành'." },
+                    { t: "Lấy bút giấy ghi sổ tay chờ check camera.", c: false, r: "Check camera tốn thời gian lắm, dùng phần mềm 3 giây là xong." },
+                    { t: "Tặng luôn khách cái váy đó cho đỡ rối.", c: false, r: "Làm vậy thì shop sớm muộn cũng thành tiệm từ thiện." }
+                ]
+            },
+            {
+                q: "Sau khi bấm 'Trả hàng' thành công, tồn kho sẽ biến động ra sao?",
+                a: [
+                    { t: "Tự động cộng lại vào kho.", c: true, r: "Chính xác! Hệ thống tự hiểu hàng đã về 'chuồng'." },
+                    { t: "Chủ shop phải tự vào cộng tay.", c: false, r: "Tự cộng tay thì dùng phần mềm làm gì nè?" },
+                    { t: "Bị trừ đi vì hệ thống nghĩ bạn bán thêm hàng.", c: false, r: "Hệ thống KiotViet thông minh lắm, không có chuyện đó đâu." },
+                    { t: "Tồn kho biến mất chờ kiểm định.", c: false, r: "Hàng vẫn trong kho bạn mà, không bay đi đâu được." }
+                ]
+            },
+            {
+                q: "Khách bóc tem rồi nên bạn muốn thu 'phí trả hàng' 10%. Nhập vào đâu?",
+                a: [
+                    { t: "Ô Giảm giá.", c: false, r: "Giảm giá là dành cho lúc bán, đây là trả hàng mà!" },
+                    { t: "Ô Phí trả hàng.", c: true, r: "Đúng rồi! Ô này sinh ra là để dành cho những ca 'khó đỡ' này." },
+                    { t: "Ô Ghi chú rồi tự trừ nhẩm.", c: false, r: "Máy tính cầm tay để đi chợ thôi, dùng KiotViet cho chuẩn." },
+                    { t: "Không được thu phí, trái đạo đức.", c: false, r: "Quy định đổi trả là quyền của shop để bảo vệ quyền lợi nha." }
+                ]
+            },
+            {
+                q: "Khách trả món 100k, đổi món 150k. Xử lý 1 bước thế nào?",
+                a: [
+                    { t: "Chọn thêm hàng mới ngay trong phiếu trả hàng.", c: true, r: "Tuyệt vời! Hệ thống tự tính chênh lệch khách phải bù 50k." },
+                    { t: "Lập 2 phiếu riêng biệt.", c: false, r: "Cách này hơi rườm rà, mất thời gian của cả shop và khách." },
+                    { t: "Bảo khách cầm món cũ về mai quay lại.", c: false, r: "Khách đi là không quay lại đâu, chốt đơn ngay!" },
+                    { t: "Bán món mới rồi lấy tiền đút túi.", c: false, r: "Kiểm kho cuối tháng là 'khóc một dòng sông' đó nha." }
+                ]
+            },
+            {
+                q: "Khách quen muốn trừ tiền trả hàng vào nợ cũ. Làm sao?",
+                a: [
+                    { t: "Chọn thanh toán Thẻ.", c: false, r: "Thẻ là tiền tươi thóc thật qua máy mà!" },
+                    { t: "Bấm Hoàn trả tiền và để số tiền là 0.", c: true, r: "Chuẩn! Hệ thống tự động bù trừ vào sổ nợ cho khách." },
+                    { t: "Đưa tiền mặt rồi bắt khách trả lại.", c: false, r: "Làm vậy thì vừa tốn công vừa buồn cười lắm." },
+                    { t: "Xóa luôn hóa đơn cũ là xong.", c: false, r: "Xóa là mất dấu vết, kế toán sẽ không tha thứ đâu!" }
+                ]
+            },
+            {
+                q: "Tính năng này giúp tránh gian lận nhân viên bằng cách nào?",
+                a: [
+                    { t: "Ghi lại lịch sử: Ai làm, lúc nào.", c: true, r: "Đúng! Nhân viên không thể tự ý trả hàng ảo để lấy tiền túi." },
+                    { t: "Biết được trời hôm đó mưa hay nắng.", c: false, r: "KiotViet không phải trạm khí tượng thủy văn nha." },
+                    { t: "Biết khách có đang nói dối không.", c: false, r: "Phần mềm không soi tâm lý khách được, chỉ soi được dữ liệu thôi." },
+                    { t: "Biết ngày mai bán được bao nhiêu đơn.", c: false, r: "KiotViet là quản lý, không phải thầy bói đâu nhé." }
+                ]
+            },
+            {
+                q: "Tại sao không nên xóa đơn mà nên làm phiếu trả hàng?",
+                a: [
+                    { t: "Để doanh thu và báo cáo thuế chính xác.", c: true, r: "Đúng! Trả hàng giúp phản ánh đúng thực tế kinh doanh." },
+                    { t: "Vì xóa đơn tốn nhiều calo hơn.", c: false, r: "Bấm chuột thôi mà, calo gì tầm này bạn ơi." },
+                    { t: "Vì trả hàng thì máy in kêu hay hơn.", c: false, r: "Âm thanh máy in không quan trọng bằng báo cáo tài chính." },
+                    { t: "Hai cái giống hệt nhau.", c: false, r: "Khác xa nhé! Một cái là xóa sạch, một cái là ghi nhận chuyên nghiệp." }
+                ]
+            },
+            {
+                q: "Hoàn tiền bằng 'Điểm thưởng' được không?",
+                a: [
+                    { t: "Được, KiotViet hỗ trợ quy đổi tiền thành điểm.", c: true, r: "Tuyệt! Đây là cách giữ chân khách cực kỳ thông minh." },
+                    { t: "Không, điểm chỉ để tặng.", c: false, r: "KiotViet linh hoạt lắm, hoàn bằng điểm vô tư." },
+                    { t: "Được nhưng phải lấy kéo cắt thẻ điểm.", c: false, r: "Giờ dùng thẻ app rồi, không cần kéo đâu." },
+                    { t: "Chỉ người thân chủ shop mới được.", c: false, r: "Kinh doanh công bằng, ai cũng áp dụng được." }
+                ]
+            },
+            {
+                q: "Trạng thái 'Đã nhận hàng' có nghĩa là gì?",
+                a: [
+                    { t: "Hàng đã về kho, sẵn sàng bán tiếp.", c: true, r: "Chuẩn! Xác nhận hàng hóa đã nhập lại tồn kho vật lý." },
+                    { t: "Khách đã cầm tiền đi về.", c: false, r: "Đó là trạng thái thanh toán, không phải hàng hóa." },
+                    { t: "Khách hứa sẽ mang đến trả.", c: false, r: "Lời hứa không tính là 'Đã nhận', phải cầm trên tay mới tính." },
+                    { t: "Nhân viên nhận được lời cảm ơn.", c: false, r: "Cảm ơn không giúp tồn kho tăng lên được đâu nha." }
+                ]
+            },
+            {
+                q: "Tại sao nên in phiếu trả hàng kẹp sổ sách?",
+                a: [
+                    { t: "Làm bằng chứng xác nhận hoàn tiền, tránh tranh chấp.", c: true, r: "Rất chuyên nghiệp! Giấy trắng mực đen luôn là bằng chứng tốt nhất." },
+                    { t: "Để khách dùng làm quạt cho mát.", c: false, r: "Giấy in nhiệt bé lắm, quạt không mát đâu." },
+                    { t: "Để khoe với hàng xóm.", c: false, r: "Khoe doanh thu khủng mới sướng chứ khoe cái này làm gì." },
+                    { t: "In cho vui thôi.", c: false, r: "Mọi chứng từ đều có mục đích quản lý, không có gì là 'cho vui' cả." }
+                ]
+            }
+        ];
+
+        let currentIdx = 0;
+        let score = 0;
+
+        function initGame() {
+            playSound('start');
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const data = quizData[currentIdx];
+            document.getElementById('question-count').innerText = `CA ${String(currentIdx + 1).padStart(2, '0')}/10`;
+            document.getElementById('question-text').innerText = data.q;
+            document.getElementById('feedback-panel').classList.add('hidden');
+            document.getElementById('next-btn').classList.add('hidden');
+            
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+            
+            data.a.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-hex w-full p-4 flex items-center gap-4 text-left font-bold';
+                btn.innerHTML = `
+                    <span class="cyber-font text-green-500 bg-green-500/10 px-2 py-1 border border-green-500/30">${String.fromCharCode(65+i)}</span>
+                    <span>${opt.t}</span>
+                `;
+                btn.onclick = () => selectOption(btn, opt);
+                container.appendChild(btn);
+            });
+        }
+
+        function selectOption(btn, opt) {
+            const allBtns = document.querySelectorAll('.option-hex');
+            allBtns.forEach(b => b.classList.add('disabled', 'pointer-events-none'));
+
+            const feedbackPanel = document.getElementById('feedback-panel');
+            const feedbackMsg = document.getElementById('feedback-msg');
+
+            if (opt.c) {
+                playSound('correct');
+                btn.classList.add('correct');
+                score += 100;
+                document.getElementById('score-text').innerText = String(score).padStart(4, '0');
+                feedbackMsg.innerHTML = `<span class="text-green-400 font-bold">>> CORE MATCHED:</span> ${opt.r}`;
+            } else {
+                playSound('incorrect');
+                btn.classList.add('incorrect');
+                feedbackMsg.innerHTML = `<span class="text-red-400 font-bold">>> DATA ERROR:</span> ${opt.r}`;
+                // Highlight correct
+                allBtns.forEach((b, idx) => {
+                    if (quizData[currentIdx].a[idx].c) b.classList.add('correct');
+                });
+            }
+
+            feedbackPanel.classList.remove('hidden');
+            document.getElementById('next-btn').classList.remove('hidden');
+        }
+
+        function handleNext() {
+            playSound('click');
+            currentIdx++;
+            if (currentIdx < quizData.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+            document.getElementById('final-score').innerText = `${Math.floor(score/100)}/10`;
+            
+            const comment = document.getElementById('result-comment');
+            if (score === 1000) {
+                comment.innerText = "HỆ THỐNG XÁC NHẬN: BẠN LÀ BẬC THẦY TRẢ HÀNG QUYỀN NĂNG NHẤT!";
+            } else if (score >= 700) {
+                comment.innerText = "KẾT QUẢ TỐT. BẠN ĐÃ SẴN SÀNG VẬN HÀNH KIOTVIET CYBER.";
+            } else {
+                comment.innerText = "CẦN NÂNG CẤP DỮ LIỆU. HÃY THỰC HÀNH THÊM TẠI CỬA HÀNG!";
+            }
+        }
+    </script>
+</body>
+</html>
