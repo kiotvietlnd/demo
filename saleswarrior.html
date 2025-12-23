@@ -9,13 +9,15 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { margin: 0; overflow: hidden; background-color: #1e293b; color: white; font-family: 'Courier New', Courier, monospace; user-select: none; }
+        /* Thay đổi font chữ chính sang Sans-serif cho dễ đọc */
+        body { margin: 0; overflow: hidden; background-color: #1e293b; color: white; font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; user-select: none; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
         @keyframes pulse-glow { 0%, 100% { filter: drop-shadow(0 0 5px #f59e0b); } 50% { filter: drop-shadow(0 0 20px #f59e0b); } }
         .cursor-crosshair { cursor: crosshair; }
-        .pixel-font { font-family: 'Courier New', monospace; letter-spacing: -1px; }
+        /* Cập nhật class pixel-font thành font đậm, dễ đọc, bỏ letter-spacing âm */
+        .pixel-font { font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; font-weight: 900; letter-spacing: normal; }
     </style>
 </head>
 <body>
@@ -295,7 +297,7 @@
             );
 
             if (gameState === 'start') return (
-                <div className="min-h-screen bg-slate-900 text-blue-400 font-mono flex flex-col items-center justify-center relative overflow-hidden">
+                <div className="min-h-screen bg-slate-900 text-blue-400 font-sans flex flex-col items-center justify-center relative overflow-hidden">
                     {/* Icy Background */}
                     <div className="absolute inset-0 opacity-20" style={{backgroundImage: 'radial-gradient(circle at 50% 50%, #0ea5e9 0%, transparent 50%), linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, .1) 25%, rgba(255, 255, 255, .1) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, .1) 75%, rgba(255, 255, 255, .1) 76%, transparent 77%, transparent)', backgroundSize: '60px 60px'}}></div>
                     
@@ -319,7 +321,7 @@
             );
 
              if (gameState === 'won' || gameState === 'lost') return (
-                <div className={`min-h-screen flex flex-col items-center justify-center p-8 text-center font-mono ${gameState === 'won' ? 'bg-blue-900' : 'bg-red-900'}`}>
+                <div className={`min-h-screen flex flex-col items-center justify-center p-8 text-center font-sans ${gameState === 'won' ? 'bg-blue-900' : 'bg-red-900'}`}>
                     <h1 className="text-5xl md:text-7xl font-black text-white mb-4 pixel-font drop-shadow-lg">{gameState === 'won' ? 'DEAL SUCCESS!' : 'DEAL FAILED'}</h1>
                     <p className="text-xl text-white/90 mb-8 max-w-xl">
                         {gameState === 'won' 
@@ -333,7 +335,7 @@
             );
 
             return (
-                <div className={`min-h-screen bg-slate-800 text-white font-mono overflow-hidden relative cursor-crosshair`} style={{ transform: `translate(${Math.random()*shake - shake/2}px, ${Math.random()*shake - shake/2}px)` }}>
+                <div className={`min-h-screen bg-slate-800 text-white font-sans overflow-hidden relative cursor-crosshair`} style={{ transform: `translate(${Math.random()*shake - shake/2}px, ${Math.random()*shake - shake/2}px)` }}>
                     {flash && <div className="absolute inset-0 bg-white z-50 opacity-50 pointer-events-none"></div>}
                     
                     {/* Background Grid */}
